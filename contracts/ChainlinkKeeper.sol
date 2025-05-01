@@ -2,8 +2,14 @@ pragma solidity ^0.8.0;
 
 import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./NotaryNFT.sol";
 
 contract ChainlinkKeeper is Ownable, KeeperCompatibleInterface {
+    NotaryNFT public notaryNFT;
+
+    constructor(address _notaryNFT) {
+        notaryNFT = NotaryNFT(_notaryNFT);
+    }
 
     // ... (Add variables for Chainlink integration, e.g., oracle address, job ID)
 
@@ -29,5 +35,8 @@ contract ChainlinkKeeper is Ownable, KeeperCompatibleInterface {
         // This could involve sending encrypted data to the AI service, receiving results,
         // and updating the smart contract state accordingly.
         // ...
+
+        // Mint NFT for notarized document
+        notaryNFT.mintNotaryNFT(msg.sender, keccak256(performData));
     }
 }
