@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -27,6 +28,7 @@ contract NotaryNFT is
     ERC721URIStorage,
     ERC721Enumerable,
     ERC721Burnable,
+    ERC2981,
     AccessControl,
     Pausable,
     ReentrancyGuard,
@@ -119,6 +121,10 @@ contract NotaryNFT is
     uint256 public totalRevoked;
     uint256 public totalExpired;
 
+    // ERC-2981 Royalty config
+    uint96  public defaultRoyaltyBP;   // Default royalty in basis points (e.g. 500 = 5%)
+    address public royaltyReceiver;    // Default royalty recipient
+
     // EIP-712 typehash for signature approval
     bytes32 public constant SIGN_TYPEHASH = keccak256(
         "SignDocument(uint256 tokenId,bytes32 documentHash,address signer,uint256 nonce)"
@@ -174,6 +180,14 @@ contract NotaryNFT is
 
     event TransferLockSet(uint256 indexed tokenId, bool locked, address setBy);
 
+    event RoyaltySet(
+        uint256 indexed tokenId,
+        address indexed receiver,
+        uint96  feeBasisPoints
+    );
+
+    event DefaultRoyaltyUpdated(address indexed receiver, uint96 feeBasisPoints);
+
     // ─────────────────────────────────────────────────────────────────────────
     // Constructor
     // ─────────────────────────────────────────────────────────────────────────
@@ -189,6 +203,11 @@ contract NotaryNFT is
         _grantRole(MINTER_ROLE,        admin);
         _grantRole(COMPLIANCE_ROLE,    admin);
         _grantRole(METADATA_ROLE,      admin);
+
+        // Default royalty: 5% to admin
+        defaultRoyaltyBP = 500;
+        royaltyReceiver  = admin;
+        _setDefaultRoyalty(admin, 500);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -231,6 +250,7 @@ contract NotaryNFT is
         nonReentrant
         returns (uint256 tokenId)
     {
+        // Note: royalty defaults to global default; call setTokenRoyalty after mint for custom rates
         require(recipient != address(0),                   "NotaryNFT: invalid recipient");
         require(documentHash != bytes32(0),                "NotaryNFT: null document hash");
         require(documentHashToTokenId[documentHash] == 0,  "NotaryNFT: document already notarized");
@@ -467,6 +487,60 @@ contract NotaryNFT is
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // Royalty Management (ERC-2981)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * @notice Set a custom royalty for a specific token.
+     *         Overrides the default royalty for this tokenId only.
+     * @param tokenId   Token to configure
+     * @param receiver  Royalty recipient address
+     * @param feeBP     Fee in basis points (max 1000 = 10%)
+     */
+    function setTokenRoyalty(
+        uint256 tokenId,
+        address receiver,
+        uint96  feeBP
+    )
+        external
+        onlyRole(NFT_ADMIN)
+    {
+        require(seals[tokenId].mintedAt > 0, "NotaryNFT: token does not exist");
+        require(receiver != address(0),       "NotaryNFT: invalid receiver");
+        require(feeBP <= 1000,                "NotaryNFT: royalty too high"); // max 10%
+        _setTokenRoyalty(tokenId, receiver, feeBP);
+        emit RoyaltySet(tokenId, receiver, feeBP);
+    }
+
+    /**
+     * @notice Update the default royalty applied to all tokens without a custom rate.
+     * @param receiver  Default royalty recipient
+     * @param feeBP     Fee in basis points (max 1000 = 10%)
+     */
+    function setDefaultRoyalty(
+        address receiver,
+        uint96  feeBP
+    )
+        external
+        onlyRole(NFT_ADMIN)
+    {
+        require(receiver != address(0), "NotaryNFT: invalid receiver");
+        require(feeBP <= 1000,          "NotaryNFT: royalty too high");
+        defaultRoyaltyBP = feeBP;
+        royaltyReceiver  = receiver;
+        _setDefaultRoyalty(receiver, feeBP);
+        emit DefaultRoyaltyUpdated(receiver, feeBP);
+    }
+
+    /**
+     * @notice Reset a token's custom royalty back to the default.
+     */
+    function resetTokenRoyalty(uint256 tokenId) external onlyRole(NFT_ADMIN) {
+        require(seals[tokenId].mintedAt > 0, "NotaryNFT: token does not exist");
+        _resetTokenRoyalty(tokenId);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Admin
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -489,7 +563,7 @@ contract NotaryNFT is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable, ERC721URIStorage, AccessControl)
+        override(ERC721, ERC721Enumerable, ERC721URIStorage, ERC2981, AccessControl)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

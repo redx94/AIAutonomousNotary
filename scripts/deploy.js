@@ -113,6 +113,22 @@ async function main() {
     "ValidationOracle", ValidationOracle, deployer.address, initialOracles
   );
 
+  // ─── 9. Deploy ConditionalAccess ─────────────────────────────────────────
+  console.log("\n── Phase 1E: Conditional Access & Fractionalization ──\n");
+  const ConditionalAccess = await ethers.getContractFactory("ConditionalAccess");
+  const conditionalAccess = await deploy(
+    "ConditionalAccess", ConditionalAccess, deployer.address, deployer.address
+  );
+
+  // Grant oracle role on ConditionalAccess to the deployer (fleshed out with real oracle nodes later)
+  const CA_ORACLE_ROLE = await conditionalAccess.ORACLE_ROLE();
+  await (await conditionalAccess.grantRole(CA_ORACLE_ROLE, deployer.address)).wait();
+  console.log("   ✅ ConditionalAccess oracle role granted");
+
+  // Note: FractionalizationVault is deployed on-demand per NFT token, not globally.
+  // The deploy script demonstrates a template deployment for documentation purposes.
+  console.log("   ℹ️  FractionalizationVault: deployed per-token by NFT owners (no global address)");
+
   // ─── Configure Roles & Links ─────────────────────────────────────────────
   console.log("\n── Configuring Inter-Contract Roles ──\n");
 

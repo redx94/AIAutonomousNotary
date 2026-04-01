@@ -67,6 +67,12 @@ describe("AI Autonomous Notary Protocol — Phase 1", function () {
     aiEngine = await AIEngine.deploy(admin.address, [oracle1.address, oracle2.address, oracle3.address]);
     await aiEngine.waitForDeployment();
 
+    // Grant AI_ORACLE_ROLE to oracles (constructor registers them but doesn't grant role)
+    const AI_ORACLE_ROLE = await aiEngine.AI_ORACLE_ROLE();
+    await aiEngine.grantRole(AI_ORACLE_ROLE, oracle1.address);
+    await aiEngine.grantRole(AI_ORACLE_ROLE, oracle2.address);
+    await aiEngine.grantRole(AI_ORACLE_ROLE, oracle3.address);
+
     // Grant requestor role
     const REQUESTOR_ROLE = await aiEngine.REQUESTOR_ROLE();
     await aiEngine.grantRole(REQUESTOR_ROLE, notary.address);
@@ -343,10 +349,9 @@ describe("AI Autonomous Notary Protocol — Phase 1", function () {
       });
 
       it("should revoke a document", async function () {
-        const REGISTRY_ADMIN = await documentRegistry.REGISTRY_ADMIN();
         await documentRegistry.connect(admin).revokeDocument(1n, "Court order #12345");
         const doc = await documentRegistry.getDocument(1n);
-        expect(doc.status).to.equal(4n); // REVOKED
+        expect(doc.status).to.equal(3n); // REVOKED (PENDING=0, VALIDATED=1, NOTARIZED=2, REVOKED=3)
       });
     });
   });
@@ -730,7 +735,385 @@ describe("AI Autonomous Notary Protocol — Phase 1", function () {
   });
 
   // ─────────────────────────────────────────────────────────────────────────
-  // 8. Integration Tests
+  // 8. NotaryNFT — ERC-2981 Royalties
+  // ─────────────────────────────────────────────────────────────────────────
+
+  describe("NotaryNFT — ERC-2981 Royalties", function () {
+    const docDate = Math.floor(Date.now() / 1000) - 86400;
+
+    beforeEach(async function () {
+      await notaryNFT.connect(notary).mintNotarySeal(
+        user1.address, SAMPLE_HASH, SAMPLE_METADATA_HASH,
+        SAMPLE_IPFS_CID, SAMPLE_JURISDICTION, 1, docDate, 0, 1n, 8500n, 0,
+        `ipfs://${SAMPLE_IPFS_CID}`
+      );
+    });
+
+    it("should have default royalty of 5% (500 bp)", async function () {
+      const [receiver, amount] = await notaryNFT.royaltyInfo(1n, ethers.parseEther("100"));
+      expect(receiver).to.equal(admin.address);
+      // 5% of 100 ETH = 5 ETH
+      expect(amount).to.equal(ethers.parseEther("5"));
+    });
+
+    it("should support ERC-2981 interface", async function () {
+      const ERC2981_INTERFACE_ID = "0x2a55205a";
+      expect(await notaryNFT.supportsInterface(ERC2981_INTERFACE_ID)).to.be.true;
+    });
+
+    it("should allow admin to set per-token royalty", async function () {
+      await notaryNFT.connect(admin).setTokenRoyalty(1n, treasury.address, 300n); // 3%
+      const [receiver, amount] = await notaryNFT.royaltyInfo(1n, ethers.parseEther("100"));
+      expect(receiver).to.equal(treasury.address);
+      expect(amount).to.equal(ethers.parseEther("3"));
+    });
+
+    it("should allow admin to update default royalty", async function () {
+      await notaryNFT.connect(admin).setDefaultRoyalty(treasury.address, 750n); // 7.5%
+      const [receiver, amount] = await notaryNFT.royaltyInfo(1n, ethers.parseEther("100"));
+      expect(receiver).to.equal(treasury.address);
+      expect(amount).to.equal(ethers.parseEther("7.5"));
+    });
+
+    it("should reject royalty above 10%", async function () {
+      await expect(
+        notaryNFT.connect(admin).setTokenRoyalty(1n, treasury.address, 1001n)
+      ).to.be.revertedWith("NotaryNFT: royalty too high");
+    });
+
+    it("should reset token royalty to default", async function () {
+      await notaryNFT.connect(admin).setTokenRoyalty(1n, treasury.address, 300n);
+      await notaryNFT.connect(admin).resetTokenRoyalty(1n);
+      const [receiver, amount] = await notaryNFT.royaltyInfo(1n, ethers.parseEther("100"));
+      expect(receiver).to.equal(admin.address); // back to default
+      expect(amount).to.equal(ethers.parseEther("5")); // back to 5%
+    });
+
+    it("should reject non-admin royalty changes", async function () {
+      await expect(
+        notaryNFT.connect(user1).setTokenRoyalty(1n, user1.address, 100n)
+      ).to.be.reverted;
+    });
+
+    it("should emit RoyaltySet event", async function () {
+      await expect(
+        notaryNFT.connect(admin).setTokenRoyalty(1n, treasury.address, 300n)
+      ).to.emit(notaryNFT, "RoyaltySet")
+        .withArgs(1n, treasury.address, 300n);
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 9. FractionalizationVault
+  // ─────────────────────────────────────────────────────────────────────────
+
+  describe("FractionalizationVault", function () {
+    let vault;
+    const docDate = Math.floor(Date.now() / 1000) - 86400;
+    const TOTAL_SHARES = ethers.parseEther("1000000"); // 1M shares
+    const FLOOR_PRICE  = ethers.parseEther("10");      // 10 ETH floor
+    const FEE_BP       = 200n;                          // 2% fee
+
+    beforeEach(async function () {
+      // Mint a NotaryNFT for user1
+      await notaryNFT.connect(notary).mintNotarySeal(
+        user1.address, SAMPLE_HASH, SAMPLE_METADATA_HASH,
+        SAMPLE_IPFS_CID, SAMPLE_JURISDICTION, 1, docDate, 0, 1n, 8500n, 0,
+        `ipfs://${SAMPLE_IPFS_CID}`
+      );
+
+      const VaultFactory = await ethers.getContractFactory("FractionalizationVault");
+
+      // The approve tx will consume nonce N; the deploy tx will use nonce N+1.
+      // So we compute the future address using nonce N+1.
+      const currentNonce = await ethers.provider.getTransactionCount(user1.address);
+      const futureAddr   = ethers.getCreateAddress({ from: user1.address, nonce: currentNonce + 1 });
+
+      // Pre-approve the future vault address so the constructor can safeTransferFrom
+      await notaryNFT.connect(user1).approve(futureAddr, 1n);
+
+      vault = await VaultFactory.connect(user1).deploy(
+        await notaryNFT.getAddress(),
+        1n,
+        user1.address,
+        TOTAL_SHARES,
+        FLOOR_PRICE,
+        FEE_BP,
+        treasury.address,
+        "Fractional NotaryNFT #1",
+        "fNFT1"
+      );
+      await vault.waitForDeployment();
+    });
+
+    it("should have correct initial state", async function () {
+      expect(await vault.totalShares()).to.equal(TOTAL_SHARES);
+      expect(await vault.state()).to.equal(0n); // OPEN
+      expect(await vault.originalOwner()).to.equal(user1.address);
+    });
+
+    it("should hold the NFT after deposit", async function () {
+      expect(await notaryNFT.ownerOf(1n)).to.equal(await vault.getAddress());
+    });
+
+    it("should issue all shares to depositor", async function () {
+      const balance = await vault.balanceOf(user1.address);
+      expect(balance).to.equal(TOTAL_SHARES);
+    });
+
+    it("should allow revenue deposit and track distribution index", async function () {
+      const amount = ethers.parseEther("1");
+      await vault.connect(admin).depositRevenue({ value: amount });
+      // distributionIndex should be > 0
+      const info = await vault.getVaultInfo();
+      expect(info.totalDistributed_).to.be.gt(0n);
+    });
+
+    it("should allow fractional transfer and revenue claim", async function () {
+      const half = TOTAL_SHARES / 2n;
+      await vault.connect(user1).transfer(user2.address, half);
+      expect(await vault.balanceOf(user2.address)).to.equal(half);
+
+      // Deposit revenue
+      await vault.connect(admin).depositRevenue({ value: ethers.parseEther("2") });
+
+      // Both users should have pending revenue
+      const pendingUser1 = await vault.pendingRevenue(user1.address);
+      const pendingUser2 = await vault.pendingRevenue(user2.address);
+      expect(pendingUser1).to.be.gt(0n);
+      expect(pendingUser2).to.be.gt(0n);
+    });
+
+    it("should allow owner to redeem all shares and reclaim NFT", async function () {
+      await vault.connect(user1).redeemAll();
+      expect(await notaryNFT.ownerOf(1n)).to.equal(user1.address);
+      expect(await vault.state()).to.equal(2n); // CLOSED
+    });
+
+    it("should initiate buyout and finalize after window", async function () {
+      // Distribute shares so user1 has 0 (buyout initiator can't hold fractions)
+      await vault.connect(user1).transfer(user2.address, TOTAL_SHARES);
+
+      const minPrice = (FLOOR_PRICE * 110n) / 100n;
+      await vault.connect(admin).initiateBuyout({ value: minPrice });
+      expect(await vault.state()).to.equal(1n); // BUYOUT_INITIATED
+
+      // Fast-forward past buyout window
+      await time.increase(49 * 3600); // 49 hours
+
+      await vault.connect(admin).finalizeBuyout();
+      expect(await vault.state()).to.equal(2n); // CLOSED
+      expect(await notaryNFT.ownerOf(1n)).to.equal(admin.address);
+    });
+
+    it("should cancel buyout on majority veto", async function () {
+      // user2 holds all shares (majority)
+      await vault.connect(user1).transfer(user2.address, TOTAL_SHARES);
+
+      const minPrice = (FLOOR_PRICE * 110n) / 100n;
+      await vault.connect(admin).initiateBuyout({ value: minPrice });
+
+      // user2 vetoes with 100% — automatically cancelled
+      await vault.connect(user2).vetoBuyout();
+      expect(await vault.state()).to.equal(0n); // OPEN — cancelled
+    });
+
+    it("should reject buyout below floor price", async function () {
+      await vault.connect(user1).transfer(user2.address, TOTAL_SHARES);
+      await expect(
+        vault.connect(admin).initiateBuyout({ value: FLOOR_PRICE }) // no premium
+      ).to.be.revertedWith("FractionalizationVault: price too low");
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 10. ConditionalAccess
+  // ─────────────────────────────────────────────────────────────────────────
+
+  describe("ConditionalAccess", function () {
+    let conditionalAccess;
+    const ENC_KEY_REF  = "QmEncryptedKeyRefIPFSCID12345";
+    const METADATA_URI = "ipfs://QmMetadata";
+
+    beforeEach(async function () {
+      const ConditionalAccess = await ethers.getContractFactory("ConditionalAccess");
+      conditionalAccess = await ConditionalAccess.deploy(admin.address, treasury.address);
+      await conditionalAccess.waitForDeployment();
+
+      // Grant oracle role
+      const ORACLE_ROLE = await conditionalAccess.ORACLE_ROLE();
+      await conditionalAccess.grantRole(ORACLE_ROLE, oracle1.address);
+    });
+
+    describe("Time-Lock Policy", function () {
+      it("should create a time-lock policy", async function () {
+        const releaseAt = (await time.latest()) + 3600;
+        const tx = await conditionalAccess.connect(user1).createTimeLockPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, releaseAt, 0
+        );
+        await tx.wait();
+        const policy = await conditionalAccess.getPolicy(1n);
+        expect(policy.documentHash).to.equal(SAMPLE_HASH);
+        expect(policy.status).to.equal(0n); // ACTIVE
+      });
+
+      it("should release after time passes", async function () {
+        const releaseAt = (await time.latest()) + 3600;
+        await conditionalAccess.connect(user1).createTimeLockPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, releaseAt, 0
+        );
+
+        await time.increase(3700);
+
+        await conditionalAccess.fulfillTimeLock(1n, 0n);
+        expect(await conditionalAccess.isReleased(1n)).to.be.true;
+      });
+
+      it("should reject early fulfillment", async function () {
+        const releaseAt = (await time.latest()) + 86400; // 1 day future
+        await conditionalAccess.connect(user1).createTimeLockPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, releaseAt, 0
+        );
+        await expect(
+          conditionalAccess.fulfillTimeLock(1n, 0n)
+        ).to.be.revertedWith("ConditionalAccess: not yet");
+      });
+
+      it("should reject release in the past", async function () {
+        const pastTime = (await time.latest()) - 1;
+        await expect(
+          conditionalAccess.connect(user1).createTimeLockPolicy(
+            SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, pastTime, 0
+          )
+        ).to.be.revertedWith("ConditionalAccess: release must be future");
+      });
+    });
+
+    describe("Oracle-Triggered Policy", function () {
+      const EVENT_ID = ethers.keccak256(ethers.toUtf8Bytes("death_verified_0x123"));
+
+      it("should create an oracle policy", async function () {
+        await conditionalAccess.connect(user1).createOraclePolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, EVENT_ID, 0
+        );
+        const policy = await conditionalAccess.getPolicy(1n);
+        expect(policy.status).to.equal(0n); // ACTIVE
+      });
+
+      it("should release on oracle verification", async function () {
+        await conditionalAccess.connect(user1).createOraclePolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, EVENT_ID, 0
+        );
+        await conditionalAccess.connect(oracle1).submitOracleEvent(1n, 0n, true);
+        expect(await conditionalAccess.isReleased(1n)).to.be.true;
+      });
+
+      it("should emit PolicyReleased with encrypted key ref", async function () {
+        await conditionalAccess.connect(user1).createOraclePolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, EVENT_ID, 0
+        );
+        await expect(
+          conditionalAccess.connect(oracle1).submitOracleEvent(1n, 0n, true)
+        ).to.emit(conditionalAccess, "PolicyReleased")
+          .withArgs(1n, SAMPLE_HASH, oracle1.address, ENC_KEY_REF, await time.latest() + 1);
+      });
+
+      it("should reject non-oracle submissions", async function () {
+        await conditionalAccess.connect(user1).createOraclePolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, EVENT_ID, 0
+        );
+        await expect(
+          conditionalAccess.connect(user1).submitOracleEvent(1n, 0n, true)
+        ).to.be.reverted;
+      });
+    });
+
+    describe("Multi-Sig Policy", function () {
+      it("should release after M-of-N approvals", async function () {
+        await conditionalAccess.connect(user1).createMultiSigPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, 2n, 0 // 2 signers required
+        );
+
+        await conditionalAccess.connect(user1).submitSignerApproval(1n, 0n);
+        expect(await conditionalAccess.isReleased(1n)).to.be.false;
+
+        await conditionalAccess.connect(user2).submitSignerApproval(1n, 0n);
+        expect(await conditionalAccess.isReleased(1n)).to.be.true;
+      });
+
+      it("should reject double-approval from same signer", async function () {
+        await conditionalAccess.connect(user1).createMultiSigPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, 2n, 0
+        );
+        await conditionalAccess.connect(user1).submitSignerApproval(1n, 0n);
+        await expect(
+          conditionalAccess.connect(user1).submitSignerApproval(1n, 0n)
+        ).to.be.revertedWith("ConditionalAccess: already approved");
+      });
+    });
+
+    describe("Payment Policy", function () {
+      it("should release on ETH payment", async function () {
+        const requiredPayment = ethers.parseEther("1");
+        await conditionalAccess.connect(user1).createPaymentPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, requiredPayment, 0
+        );
+
+        await conditionalAccess.connect(user2).fulfillPayment(1n, 0n, { value: requiredPayment });
+        expect(await conditionalAccess.isReleased(1n)).to.be.true;
+      });
+
+      it("should allow owner to claim escrowed ETH after release", async function () {
+        const requiredPayment = ethers.parseEther("1");
+        await conditionalAccess.connect(user1).createPaymentPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, requiredPayment, 0
+        );
+        await conditionalAccess.connect(user2).fulfillPayment(1n, 0n, { value: requiredPayment });
+
+        const balBefore = await ethers.provider.getBalance(user1.address);
+        await conditionalAccess.connect(user1).claimEscrow(1n);
+        const balAfter  = await ethers.provider.getBalance(user1.address);
+        expect(balAfter).to.be.gt(balBefore);
+      });
+
+      it("should reject underpayment", async function () {
+        const requiredPayment = ethers.parseEther("1");
+        await conditionalAccess.connect(user1).createPaymentPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, requiredPayment, 0
+        );
+        await expect(
+          conditionalAccess.connect(user2).fulfillPayment(1n, 0n, { value: ethers.parseEther("0.5") })
+        ).to.be.revertedWith("ConditionalAccess: insufficient payment");
+      });
+    });
+
+    describe("Admin Controls", function () {
+      it("should revoke a policy via compliance role", async function () {
+        const releaseAt = (await time.latest()) + 3600;
+        await conditionalAccess.connect(user1).createTimeLockPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, releaseAt, 0
+        );
+        await conditionalAccess.connect(admin).revokePolicy(1n, "Court order #999");
+        const policy = await conditionalAccess.getPolicy(1n);
+        expect(policy.status).to.equal(2n); // REVOKED
+      });
+
+      it("should expire a policy past its validUntil", async function () {
+        const releaseAt  = (await time.latest()) + 86400;
+        const validUntil = (await time.latest()) + 3600;
+        await conditionalAccess.connect(user1).createTimeLockPolicy(
+          SAMPLE_HASH, ENC_KEY_REF, METADATA_URI, releaseAt, validUntil
+        );
+        await time.increase(3700);
+        await conditionalAccess.expirePolicy(1n);
+        const policy = await conditionalAccess.getPolicy(1n);
+        expect(policy.status).to.equal(3n); // EXPIRED
+      });
+    });
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 11. Integration Tests
   // ─────────────────────────────────────────────────────────────────────────
 
   describe("Integration: Full Document Lifecycle", function () {
