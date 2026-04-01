@@ -1,9 +1,16 @@
 // SPDX-License-Identifier: BUSL-1.1
-// Copyright (c) 2024 Reece Dixon - All Rights Reserved.
-// This file is part of AI Autonomous Notary.
-// Unauthorized copying, modification, or commercial use of this file,
-// via any medium, is strictly prohibited until the Change Date.
-
+/**
+ * ============================================================================
+ * @title    ChainlinkKeeper.sol
+ * @author   Reece Dixon
+ * @project  AI Autonomous Notary Protocol
+ * @date     2026
+ * 
+ * @notice   Copyright (c) 2026 Reece Dixon - All Rights Reserved.
+ *           Unauthorized copying, modification, or commercial use of this file,
+ *           via any medium, is strictly prohibited until the license Change Date.
+ * ============================================================================
+ */
 pragma solidity ^0.8.20;
 
 import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";

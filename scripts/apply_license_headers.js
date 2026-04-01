@@ -1,12 +1,18 @@
+/**
+ * ============================================================================
+ * File:      apply_license_headers.js
+ * Author:   Reece Dixon
+ * Project:  AI Autonomous Notary Protocol
+ * 
+ * Copyright (c) 2026 Reece Dixon - All Rights Reserved.
+ * Unauthorized copying, modification, or commercial use of this file,
+ * via any medium, is strictly prohibited until the license Change Date.
+ * ============================================================================
+ */
 const fs = require('fs');
 const path = require('path');
 
-const HEADER_TEXT = `// SPDX-License-Identifier: BUSL-1.1
-// Copyright (c) 2024 Reece Dixon - All Rights Reserved.
-// This file is part of AI Autonomous Notary.
-// Unauthorized copying, modification, or commercial use of this file,
-// via any medium, is strictly prohibited until the Change Date.
-`;
+const HEADER_TEXT = ``;
 
 const DIRECTORIES = ['contracts', 'scripts', 'test'];
 

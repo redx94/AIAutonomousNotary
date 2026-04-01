@@ -1,9 +1,14 @@
-// SPDX-License-Identifier: BUSL-1.1
-// Copyright (c) 2024 Reece Dixon - All Rights Reserved.
-// This file is part of AI Autonomous Notary.
-// Unauthorized copying, modification, or commercial use of this file,
-// via any medium, is strictly prohibited until the Change Date.
-
+/**
+ * ============================================================================
+ * File:      hardhat.config.js
+ * Author:   Reece Dixon
+ * Project:  AI Autonomous Notary Protocol
+ * 
+ * Copyright (c) 2026 Reece Dixon - All Rights Reserved.
+ * Unauthorized copying, modification, or commercial use of this file,
+ * via any medium, is strictly prohibited until the license Change Date.
+ * ============================================================================
+ */
 require("@nomicfoundation/hardhat-toolbox");
 require("hardhat-contract-sizer");
 require("hardhat-gas-reporter");
