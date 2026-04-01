@@ -51,6 +51,20 @@ For comprehensive research and project blueprint, see:
 - `docs/RESEARCH.md` - Organized research summary with market analysis
 - `docs/blueprint.html` - Interactive HTML presentation of the project vision
 
+
+## Visual Concepts & Blueprints
+
+To illustrate the platform's user experience and unique NFT mechanics, see the following conceptual mockups:
+
+### 1. DApp Dashboard Interface
+A web3-native, glassmorphism UI designed for both individuals and notary professionals.
+![AI Notary Dashboard Mockup](docs/ainotary_dashboard_mockup.png)
+*Read the full [Frontend Architecture Blueprint](docs/FRONTEND_BLUEPRINT.md)*
+
+### 2. "Living Cipher" / Cryptographic Mandala NFTs
+Instead of standard QR codes, our NFTs are machine-readable geometric ciphers. The exact patterns are mathematically derived from the notarized document's SHA-256 hash using steganography.
+![Living Cipher NFT Concept](docs/ainotary_nft_concept.png)
+
 ## Market Opportunity
 
 | Metric | Value |
