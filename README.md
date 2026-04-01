@@ -124,6 +124,8 @@ Explore the full protocol blueprint and Phase 2 architecture:
 
 ## 📄 License & Security
 
+- 💰 **[Financial Valuation Model](docs/VALUATION_MODEL.md)** - 5-Year ARR projections, RWA market comps, and Seed round FDV justification for investors.
+
 This project is licensed under the [MIT License](./LICENSE).
 
 **Security Notice:** Phase 1 smart contracts have achieved `~80%` test coverage and incorporate rigorous OpenZeppelin access controls (`AccessControl`, `Pausable`, `ReentrancyGuard`). However, the protocol is actively under development and **has not yet undergone a formal external audit**. Do not use in production with real funds until Phase 3.
