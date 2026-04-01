@@ -10,6 +10,11 @@ The end-user application is the **face of the platform** — a web3-native, mobi
 
 ## Application Architecture
 
+> **Conceptual Mockup**: The image below is a high-fidelity rendering demonstrating the intended dark-mode glassmorphism aesthetic and core layout. It is a visual concept, not a final implemented design.
+
+![AI Notary Dashboard Mockup](./ainotary_dashboard_mockup.png)
+
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │  Frontend Application (Next.js 14 App Router)                   │
