@@ -1,0 +1,25 @@
+node_modules/
+artifacts/
+cache/
+typechain/
+typechain-types/
+coverage/
+coverage.json
+gas-report.txt
+deployments/*.json
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/settings.json
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hardhat
+.openzeppelin/

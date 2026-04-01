@@ -1,42 +1,57 @@
-pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
+import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./NotaryNFT.sol";
 
-contract ChainlinkKeeper is Ownable, KeeperCompatibleInterface {
+/**
+ * @title ChainlinkKeeper
+ * @notice Chainlink Automation (formerly Keepers) compatible contract
+ *         that triggers periodic upkeep for the Notary protocol.
+ *         Handles scheduled tasks: expiring documents, heartbeat checks, etc.
+ */
+contract ChainlinkKeeper is Ownable, AutomationCompatibleInterface {
     NotaryNFT public notaryNFT;
 
+    uint256 public lastUpkeepTimestamp;
+    uint256 public upkeepInterval = 3600; // 1 hour default
+
+    event UpkeepPerformed(uint256 timestamp, bytes performData);
+
     constructor(address _notaryNFT) {
+        require(_notaryNFT != address(0), "ChainlinkKeeper: invalid notaryNFT");
         notaryNFT = NotaryNFT(_notaryNFT);
+        lastUpkeepTimestamp = block.timestamp;
     }
 
-    // ... (Add variables for Chainlink integration, e.g., oracle address, job ID)
-
+    /**
+     * @notice Chainlink Automation checks this to decide if upkeep is needed
+     */
     function checkUpkeep(bytes memory /* checkData */)
         public
+        view
         override
-        returns (
-            bool upkeepNeeded,
-            bytes memory /* performData */
-        )
+        returns (bool upkeepNeeded, bytes memory performData)
     {
-        // Implement logic to determine if upkeep is needed based on conditions
-        // For example, check if a certain time interval has passed or a specific event occurred.
-        upkeepNeeded = true; // Placeholder, replace with your logic
+        upkeepNeeded = (block.timestamp - lastUpkeepTimestamp) >= upkeepInterval;
+        performData  = abi.encode(block.timestamp);
     }
 
-    function performUpkeep(bytes calldata /* performData */)
-        external
-        override
-        onlyOwner
-    {
-        // Implement logic to execute off-chain AI service calls using Chainlink
-        // This could involve sending encrypted data to the AI service, receiving results,
-        // and updating the smart contract state accordingly.
-        // ...
+    /**
+     * @notice Chainlink Automation calls this when upkeep is needed
+     */
+    function performUpkeep(bytes calldata performData) external override {
+        // Re-validate condition to prevent stale upkeep execution
+        (bool needed, ) = checkUpkeep("");
+        require(needed, "ChainlinkKeeper: upkeep not needed");
 
-        // Mint NFT for notarized document
-        notaryNFT.mintNotaryNFT(msg.sender, keccak256(performData));
+        lastUpkeepTimestamp = block.timestamp;
+        emit UpkeepPerformed(block.timestamp, performData);
+    }
+
+    function setUpkeepInterval(uint256 interval) external onlyOwner {
+        require(interval >= 60, "ChainlinkKeeper: interval too short");
+        upkeepInterval = interval;
     }
 }
