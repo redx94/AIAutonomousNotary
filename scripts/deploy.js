@@ -1,3 +1,9 @@
+// SPDX-License-Identifier: BUSL-1.1
+// Copyright (c) 2024 Reece Dixon - All Rights Reserved.
+// This file is part of AI Autonomous Notary.
+// Unauthorized copying, modification, or commercial use of this file,
+// via any medium, is strictly prohibited until the Change Date.
+
 /**
  * @title AI Autonomous Notary Protocol — Deployment Script
  * @notice Deploys all Phase 1 contracts in dependency order,
