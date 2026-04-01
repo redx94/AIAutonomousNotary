@@ -6,7 +6,7 @@
 
 **The Premier Decentralized Protocol for Document Securities & Cryptographic Notarization**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![License: BUSL-1.1](https://img.shields.io/badge/License-BUSL--1.1-blue.svg)](./LICENSE)
 [![Coverage](https://img.shields.io/badge/Coverage-79%25-brightgreen.svg)]()
 [![Solidity](https://img.shields.io/badge/Solidity-%5E0.8.20-363636.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-143%20Passing-success.svg)]()
@@ -126,7 +126,7 @@ Explore the full protocol blueprint and Phase 2 architecture:
 
 - 💰 **[Financial Valuation Model](docs/VALUATION_MODEL.md)** - 5-Year ARR projections, RWA market comps, and Seed round FDV justification for investors.
 
-This project is licensed under the [MIT License](./LICENSE).
+This project is licensed under the [BUSL-1.1 License](./LICENSE).
 
 **Security Notice:** Phase 1 smart contracts have achieved `~80%` test coverage and incorporate rigorous OpenZeppelin access controls (`AccessControl`, `Pausable`, `ReentrancyGuard`). However, the protocol is actively under development and **has not yet undergone a formal external audit**. Do not use in production with real funds until Phase 3.
 
