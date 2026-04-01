@@ -47,6 +47,16 @@ The end-user application is the **face of the platform** — a web3-native, mobi
 | **Auth** | SIWE (Sign In With Ethereum) | Walletless-friendly, no passwords |
 | **Animations** | Framer Motion | Premium feel, document transitions |
 | **Charts** | Recharts | Portfolio value, token price history |
+
+### The "Living Cipher" NFT Concept
+To make the notarization NFTs highly desirable and instantly recognizable, we will move beyond standard QR codes. Instead, the AI generates a **Cryptographic Mandala** (or "Living Cipher").
+
+**How it works (Steganography):**
+The NFT artwork is a stunning, high-end geometric pattern (glowing cybernetic lines, sacred geometry). However, the specific thickness, colors, intersection angles, and wave frequencies are mathematically derived directly from the document's SHA-256 hash and the AI fraud score. While a human sees a beautiful abstract piece of digital art, our platform scanner can "read" the geometry to instantly verify the document, acting as an unforgeable, machine-readable visual signature.
+
+**Conceptual Mockup:**
+![Living Cipher NFT Concept](./ainotary_nft_concept.png)
+
 | **PDF** | pdf-lib + react-pdf | Document preview and generation |
 | **Notifications** | React Hot Toast | Transaction status feedback |
 
