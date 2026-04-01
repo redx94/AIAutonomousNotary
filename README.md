@@ -59,6 +59,40 @@ Traditional notarization is a $2.8B market constrained by physical boundaries an
 
 ---
 
+## 💼 Investor Relations
+
+> **Not a developer? Start here.** Our dedicated investor documentation explains everything about this project in plain English — no technical background required.
+
+### 📁 [→ Access the Investor Resource Center](./investors/README.md)
+
+| Quick Stat | |
+|---|---|
+| **Raise Target** | $3.5M – $5.0M Seed Round |
+| **Pre-Money Valuation** | $25M – $35M FDV |
+| **Technology Status** | Phase 1 Complete — 143/143 tests passing |
+| **5-Year Revenue Target** | $88.5M ARR |
+| **Token Supply** | 100,000,000 $NOTARY (fixed, deflationary) |
+| **Investor Allocation** | 15% of total token supply |
+
+### Investor Documents
+
+| Document | What It Covers |
+|----------|----------------|
+| [📋 Executive Summary](./investors/01_EXECUTIVE_SUMMARY.md) | What we do and why it matters — start here |
+| [🔍 The Problem & Solution](./investors/02_THE_PROBLEM_AND_SOLUTION.md) | The broken system we're replacing |
+| [📖 How It Works](./investors/03_HOW_IT_WORKS.md) | Simple, step-by-step platform walkthrough |
+| [📊 Market Opportunity](./investors/04_MARKET_OPPORTUNITY.md) | $12.6B notary market + $3T RWA opportunity |
+| [💰 Business Model](./investors/05_BUSINESS_MODEL.md) | Three automated revenue streams explained |
+| [📈 Financial Projections](./investors/06_FINANCIAL_PROJECTIONS.md) | 5-year forecast with assumptions explained plainly |
+| [🪙 Token & Investment Terms](./investors/07_TOKEN_AND_INVESTMENT.md) | What you receive as an investor |
+| [🗺️ Roadmap](./investors/08_ROADMAP.md) | Build plan and milestones in plain English |
+| [🏆 Competitive Advantage](./investors/09_COMPETITIVE_ADVANTAGE.md) | Why we win against DocuSign, Centrifuge & others |
+| [🔐 Team, IP & Legal](./investors/10_TEAM_AND_IP.md) | Code protection, security architecture, FAQs |
+
+*For deeper technical context, see the [`docs/VALUATION_MODEL.md`](./docs/VALUATION_MODEL.md) and [`docs/TOKENOMICS.md`](./docs/TOKENOMICS.md).*
+
+---
+
 ## 💻 Frontend Ecosystem & UI/UX
 
 Our architecture includes a planned Next.js 14 Web3 portal designed for maximum Web2 accessibility.
