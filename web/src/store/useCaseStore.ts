@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Case, UserRole } from '../types';
-import { CaseService } from '../services/caseService';
+import * as caseAdapter from '../services/adapters/caseAdapter';
 
 interface CaseState {
   // Current user context
@@ -34,7 +34,7 @@ export const useCaseStore = create<CaseState>((set, get) => ({
   fetchCases: async () => {
     set({ isLoading: true, error: null });
     try {
-      const cases = await CaseService.getCases();
+      const cases = await caseAdapter.getCases();
       set({ cases, isLoading: false });
     } catch (err) {
       set({ error: 'Failed to fetch cases', isLoading: false });
@@ -44,7 +44,7 @@ export const useCaseStore = create<CaseState>((set, get) => ({
   fetchCase: async (actId: string) => {
     set({ isLoading: true, error: null });
     try {
-      const caseData = await CaseService.getCase(actId);
+      const caseData = await caseAdapter.getCase(actId);
       set({ currentCase: caseData || null, isLoading: false });
     } catch (err) {
       set({ error: 'Failed to fetch case', isLoading: false });
