@@ -41,6 +41,17 @@ The protocol is built on a robust, heavily-tested Solidity foundation (`143/143 
 - **`NotaryNFT.sol`**: The underlying ERC-721 contract minting the unique "Living Cipher" for every notarized document, enforcing ERC-2981 royalties.
 - **`FractionalizationVault.sol`**: Allows any Document NFT to be vaulted and fractionalized into ERC-20 shares, enabling retail investment in high-value document assets with pro-rata yield distribution and a 48-hour buyout mechanism.
 
+## 🧭 Compliance Overlay V2
+
+The repository now includes a **Compliance Overlay** that sits around the existing protocol core instead of rewriting it. In `compliant` mode, legally operative notarization runs through an off-chain, human-supervised authority flow with policy enforcement, human ceremony, final signoff, and evidence bundle generation. The existing contracts remain intact as protocol primitives and optional publication rails for downstream proof, attestation, and anchoring.
+
+This does **not** turn the project into a smaller human-only product. The autonomous/provider-oriented architecture is still present, explicit, and testable. What changes in compliant mode is the authority boundary:
+- legal validity comes from the human-supervised off-chain flow
+- protocol publication is downstream and non-authoritative for legal validity
+- compliant mode fails closed if explicit review, ceremony artifact, policy, or evidence requirements are incomplete
+
+See [`docs/architecture/compliance-overlay.md`](docs/architecture/compliance-overlay.md) and [`docs/usage/compliant-mode.md`](docs/usage/compliant-mode.md) for the operating model.
+
 ---
 
 ## 📈 Market Opportunity & Research
@@ -132,6 +143,12 @@ npx hardhat test
 
 # 4. Generate the coverage report
 npx hardhat coverage
+
+# 5. Validate overlay policy configuration
+npm run compliance:validate
+
+# 6. Run the compliant overlay test suite
+npm run test:compliance
 ```
 
 ### Deployment (Sepolia Testnet)
@@ -153,6 +170,8 @@ Explore the full protocol blueprint and Phase 2 architecture:
 - 🌐 **[DID Interface](docs/DID_INTERFACE.md)** - W3C Decentralized Identity integration for KYC/AML.
 - 🎨 **[Frontend Blueprint](docs/FRONTEND_BLUEPRINT.md)** - End-user DApp architecture and features.
 - 📜 **[Development Roadmap](docs/ROADMAP.md)** - The 5-Phase, 48-month master plan to mainnet.
+- 🧭 **[Compliance Overlay Architecture](docs/architecture/compliance-overlay.md)** - Additive legal-operability shell around the protocol core.
+- 🧱 **[Core vs Overlay Boundary](docs/architecture/core-vs-overlay-boundary.md)** - Where compliance logic lives and where it explicitly does not.
 
 ---
 

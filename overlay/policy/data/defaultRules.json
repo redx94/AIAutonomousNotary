@@ -1,0 +1,106 @@
+{
+  "policyVersion": "overlay-v2-2026-04-01",
+  "rules": [
+    {
+      "id": "us-general-compliant-notarization",
+      "jurisdiction": "US",
+      "actType": "notarization",
+      "documentType": "*",
+      "signerLocations": ["US", "*"],
+      "authorityLocations": ["US"],
+      "legalModes": ["compliant"],
+      "providerTypes": ["human_commissioned"],
+      "requireHumanSupervision": true,
+      "requireHumanCeremony": true,
+      "requireHumanFinalSignoff": true,
+      "requiredFlowSteps": [
+        "signer_intake",
+        "document_intake",
+        "ai_analysis",
+        "identity_proofing",
+        "policy_evaluation",
+        "human_review",
+        "ceremony",
+        "provider_authorization",
+        "finalization_gate",
+        "certificate_completion",
+        "final_record_signing",
+        "evidence_bundle"
+      ],
+      "requiredEvidenceArtifacts": [
+        "manifest.json",
+        "policy-decision.json",
+        "ai-analysis.json",
+        "human-review.json",
+        "ceremony-record.json",
+        "authority-execution.json",
+        "protocol-publication.json",
+        "evidence-index.json",
+        "retention-policy.json",
+        "hashes.json"
+      ],
+      "requiredIdentityChecks": ["identity_verified", "credential_screened"],
+      "retentionPolicy": {
+        "years": 7,
+        "legalAuthorityRecord": "required",
+        "publicationArtifacts": "retain-if-produced"
+      },
+      "recordingPolicy": {
+        "ceremonyRecording": "required",
+        "videoCapture": "placeholder"
+      },
+      "warnings": [
+        "AI output remains advisory-only in compliant mode",
+        "Protocol publication is downstream and non-authoritative"
+      ],
+      "maxRiskScore": 70,
+      "blockedFraudSignals": ["document_tamper_detected", "identity_mismatch"],
+      "publicationModes": ["disabled", "best_effort", "required_for_protocol_sync"]
+    },
+    {
+      "id": "us-autonomous-experimental-sandbox",
+      "jurisdiction": "US",
+      "actType": "notarization",
+      "documentType": "*",
+      "signerLocations": ["US", "*"],
+      "authorityLocations": ["US"],
+      "legalModes": ["experimental"],
+      "providerTypes": ["autonomous"],
+      "requireHumanSupervision": false,
+      "requireHumanCeremony": false,
+      "requireHumanFinalSignoff": false,
+      "requiredFlowSteps": [
+        "signer_intake",
+        "document_intake",
+        "ai_analysis",
+        "identity_proofing",
+        "policy_evaluation",
+        "shadow_benchmark"
+      ],
+      "requiredEvidenceArtifacts": [
+        "manifest.json",
+        "policy-decision.json",
+        "ai-analysis.json",
+        "authority-execution.json",
+        "protocol-publication.json",
+        "hashes.json"
+      ],
+      "requiredIdentityChecks": ["identity_verified"],
+      "retentionPolicy": {
+        "years": 3,
+        "legalAuthorityRecord": "not-legally-operative",
+        "publicationArtifacts": "retain-if-produced"
+      },
+      "recordingPolicy": {
+        "ceremonyRecording": "not-required",
+        "videoCapture": "optional"
+      },
+      "warnings": [
+        "Experimental autonomous mode is non-operative and must not be used for legal validity"
+      ],
+      "maxRiskScore": 50,
+      "blockedFraudSignals": ["document_tamper_detected", "identity_mismatch", "sanctions_match"],
+      "publicationModes": ["disabled", "best_effort"]
+    }
+  ]
+}
