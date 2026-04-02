@@ -293,13 +293,15 @@ contract FraudDetection is AccessControl, Pausable, ReentrancyGuard {
         DocumentFraudProfile storage profile = documentProfiles[documentHash];
         profile.documentHash  = documentHash;
 
-        // Running weighted average
+        // Use the maximum of the running average and new score so that a single
+        // high-confidence signal can push the composite above the blacklist threshold.
         if (profile.signalCount == 0) {
             profile.compositeScore = newScore;
         } else {
-            profile.compositeScore =
+            uint256 avg =
                 (profile.compositeScore * profile.signalCount + newScore) /
                 (profile.signalCount + 1);
+            profile.compositeScore = avg > newScore ? avg : newScore;
         }
         profile.signalCount++;
         profile.lastUpdated = block.timestamp;

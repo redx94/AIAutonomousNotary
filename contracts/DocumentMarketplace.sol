@@ -59,7 +59,7 @@ contract DocumentMarketplace is AccessControl, Pausable, ReentrancyGuard {
 
     enum OrderType   { LIMIT, MARKET }
     enum OrderSide   { BID, ASK }
-    enum OrderStatus { OPEN, FILLED, CANCELLED, PARTIALLY_FILLED }
+    enum OrderStatus { OPEN, FILLED, PARTIALLY_FILLED, CANCELLED }
 
     struct Order {
         uint256     orderId;

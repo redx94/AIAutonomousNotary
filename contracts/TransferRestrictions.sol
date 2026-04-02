@@ -48,7 +48,7 @@ contract TransferRestrictions is AccessControl, Pausable {
     uint256 public constant REG_D_LOCKUP     = 365 days;  // 12-month Reg D holding
     uint256 public constant REG_S_LOCKUP     = 180 days;  // 6-month Reg S offshore
     uint256 public constant REG_A_LOCKUP     = 180 days;  // 6-month Reg A+ initial hold
-    uint256 public constant KYC_VALIDITY     = 365 days;  // KYC credential validity
+    uint256 public constant KYC_VALIDITY     = 730 days;  // KYC credential validity (2 years)
 
     // ─────────────────────────────────────────────────────────────────────────
     // Enums

@@ -74,7 +74,7 @@ class CompliantActOrchestrator {
     const provider = this.authorityProviders[this.config.AUTHORITY_PROVIDER];
     this.humanSupervisionGate.assertCompliantProvider(context);
 
-    const aiAnalysis = this.aiAnalysisService.analyze(context, input.aiAnalysis);
+    const aiAnalysis = await this.aiAnalysisService.analyze(context, input.aiAnalysis);
     context.aiAnalysisStatus = {
       state: "completed",
       analysisId: aiAnalysis.analysisId,
@@ -88,7 +88,7 @@ class CompliantActOrchestrator {
       riskScore: aiAnalysis.riskScore,
     });
 
-    const identityProofingStatus = this.identityProofingService.verify(context, input.identityProofing);
+    const identityProofingStatus = await this.identityProofingService.verify(context, input.identityProofing);
     context.identityProofingStatus = identityProofingStatus;
 
     const policyDecision = this.policyEngine.evaluate(context);
