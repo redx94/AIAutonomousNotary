@@ -1,0 +1,275 @@
+{
+  "policyVersion": "overlay-v2-2026-04-01-us-states",
+  "rules": [
+    {
+      "id": "us-ca-compliant-notarization",
+      "jurisdiction": "US-CA",
+      "actType": "notarization",
+      "documentType": "*",
+      "signerLocations": ["US", "*"],
+      "authorityLocations": ["US"],
+      "legalModes": ["compliant"],
+      "providerTypes": ["human_commissioned"],
+      "requireHumanSupervision": true,
+      "requireHumanCeremony": true,
+      "requireHumanFinalSignoff": true,
+      "requireRemoteOnlineNotarization": true,
+      "ronPlatformApproval": "required",
+      "requiredFlowSteps": [
+        "signer_intake",
+        "document_intake",
+        "ai_analysis",
+        "identity_proofing",
+        "policy_evaluation",
+        "human_review",
+        "ceremony",
+        "provider_authorization",
+        "finalization_gate",
+        "certificate_completion",
+        "final_record_signing",
+        "evidence_bundle"
+      ],
+      "requiredEvidenceArtifacts": [
+        "manifest.json",
+        "policy-decision.json",
+        "ai-analysis.json",
+        "human-review.json",
+        "ceremony-record.json",
+        "authority-execution.json",
+        "protocol-publication.json",
+        "evidence-index.json",
+        "retention-policy.json",
+        "hashes.json"
+      ],
+      "requiredIdentityChecks": ["identity_verified", "credential_screened"],
+      "retentionPolicy": {
+        "years": 7,
+        "legalAuthorityRecord": "required",
+        "publicationArtifacts": "retain-if-produced"
+      },
+      "recordingPolicy": {
+        "ceremonyRecording": "required",
+        "videoCapture": "required",
+        "audioCapture": "required"
+      },
+      "warnings": [
+        "California Government Code § 8230 requires notary commission issued by Secretary of State",
+        "California RON requires Secretary of State approved platform",
+        "AI output remains advisory-only in compliant mode"
+      ],
+      "maxRiskScore": 70,
+      "blockedFraudSignals": ["document_tamper_detected", "identity_mismatch"],
+      "publicationModes": ["disabled", "best_effort", "required_for_protocol_sync"],
+      "stateSpecific": {
+        "state": "California",
+        "stateCode": "CA",
+        "notaryCommissionAuthority": "California Secretary of State",
+        "ronEnabled": true,
+        "maximumPrincipalDistance": null,
+        "stampsRequired": false,
+        "sealRequired": true
+      }
+    },
+    {
+      "id": "us-ny-compliant-notarization",
+      "jurisdiction": "US-NY",
+      "actType": "notarization",
+      "documentType": "*",
+      "signerLocations": ["US", "*"],
+      "authorityLocations": ["US"],
+      "legalModes": ["compliant"],
+      "providerTypes": ["human_commissioned"],
+      "requireHumanSupervision": true,
+      "requireHumanCeremony": true,
+      "requireHumanFinalSignoff": true,
+      "requireRemoteOnlineNotarization": true,
+      "requiredFlowSteps": [
+        "signer_intake",
+        "document_intake",
+        "ai_analysis",
+        "identity_proofing",
+        "policy_evaluation",
+        "human_review",
+        "ceremony",
+        "provider_authorization",
+        "finalization_gate",
+        "certificate_completion",
+        "final_record_signing",
+        "evidence_bundle"
+      ],
+      "requiredEvidenceArtifacts": [
+        "manifest.json",
+        "policy-decision.json",
+        "ai-analysis.json",
+        "human-review.json",
+        "ceremony-record.json",
+        "authority-execution.json",
+        "protocol-publication.json",
+        "evidence-index.json",
+        "retention-policy.json",
+        "hashes.json"
+      ],
+      "requiredIdentityChecks": ["identity_verified", "credential_screened"],
+      "retentionPolicy": {
+        "years": 10,
+        "legalAuthorityRecord": "required",
+        "publicationArtifacts": "retain-if-produced"
+      },
+      "recordingPolicy": {
+        "ceremonyRecording": "required",
+        "videoCapture": "required",
+        "audioCapture": "required"
+      },
+      "warnings": [
+        "New York Executive Law § 135-c governs RON",
+        "Notary must be a resident of New York or maintain a principal office in NY",
+        "AI output remains advisory-only in compliant mode"
+      ],
+      "maxRiskScore": 70,
+      "blockedFraudSignals": ["document_tamper_detected", "identity_mismatch"],
+      "publicationModes": ["disabled", "best_effort", "required_for_protocol_sync"],
+      "stateSpecific": {
+        "state": "New York",
+        "stateCode": "NY",
+        "notaryCommissionAuthority": "New York Department of State",
+        "ronEnabled": true,
+        "stampsRequired": true,
+        "sealRequired": false
+      }
+    },
+    {
+      "id": "us-tx-compliant-notarization",
+      "jurisdiction": "US-TX",
+      "actType": "notarization",
+      "documentType": "*",
+      "signerLocations": ["US", "*"],
+      "authorityLocations": ["US"],
+      "legalModes": ["compliant"],
+      "providerTypes": ["human_commissioned"],
+      "requireHumanSupervision": true,
+      "requireHumanCeremony": true,
+      "requireHumanFinalSignoff": true,
+      "requireRemoteOnlineNotarization": true,
+      "requiredFlowSteps": [
+        "signer_intake",
+        "document_intake",
+        "ai_analysis",
+        "identity_proofing",
+        "policy_evaluation",
+        "human_review",
+        "ceremony",
+        "provider_authorization",
+        "finalization_gate",
+        "certificate_completion",
+        "final_record_signing",
+        "evidence_bundle"
+      ],
+      "requiredEvidenceArtifacts": [
+        "manifest.json",
+        "policy-decision.json",
+        "ai-analysis.json",
+        "human-review.json",
+        "ceremony-record.json",
+        "authority-execution.json",
+        "protocol-publication.json",
+        "evidence-index.json",
+        "retention-policy.json",
+        "hashes.json"
+      ],
+      "requiredIdentityChecks": ["identity_verified", "credential_screened"],
+      "retentionPolicy": {
+        "years": 5,
+        "legalAuthorityRecord": "required",
+        "publicationArtifacts": "retain-if-produced"
+      },
+      "recordingPolicy": {
+        "ceremonyRecording": "required",
+        "videoCapture": "required",
+        "audioCapture": "required"
+      },
+      "warnings": [
+        "Texas Government Code Chapter 406 governs notarization",
+        "Texas RON requires Secretary of State approved system",
+        "AI output remains advisory-only in compliant mode"
+      ],
+      "maxRiskScore": 70,
+      "blockedFraudSignals": ["document_tamper_detected", "identity_mismatch"],
+      "publicationModes": ["disabled", "best_effort", "required_for_protocol_sync"],
+      "stateSpecific": {
+        "state": "Texas",
+        "stateCode": "TX",
+        "notaryCommissionAuthority": "Texas Secretary of State",
+        "ronEnabled": true,
+        "stampsRequired": true,
+        "sealRequired": true
+      }
+    },
+    {
+      "id": "us-fl-compliant-notarization",
+      "jurisdiction": "US-FL",
+      "actType": "notarization",
+      "documentType": "*",
+      "signerLocations": ["US", "*"],
+      "authorityLocations": ["US"],
+      "legalModes": ["compliant"],
+      "providerTypes": ["human_commissioned"],
+      "requireHumanSupervision": true,
+      "requireHumanCeremony": true,
+      "requireHumanFinalSignoff": true,
+      "requireRemoteOnlineNotarization": true,
+      "requiredFlowSteps": [
+        "signer_intake",
+        "document_intake",
+        "ai_analysis",
+        "identity_proofing",
+        "policy_evaluation",
+        "human_review",
+        "ceremony",
+        "provider_authorization",
+        "finalization_gate",
+        "certificate_completion",
+        "final_record_signing",
+        "evidence_bundle"
+      ],
+      "requiredEvidenceArtifacts": [
+        "manifest.json",
+        "policy-decision.json",
+        "ai-analysis.json",
+        "human-review.json",
+        "ceremony-record.json",
+        "authority-execution.json",
+        "protocol-publication.json",
+        "evidence-index.json",
+        "retention-policy.json",
+        "hashes.json"
+      ],
+      "requiredIdentityChecks": ["identity_verified", "credential_screened"],
+      "retentionPolicy": {
+        "years": 10,
+        "legalAuthorityRecord": "required",
+        "publicationArtifacts": "retain-if-produced"
+      },
+      "recordingPolicy": {
+        "ceremonyRecording": "required",
+        "videoCapture": "required",
+        "audioCapture": "required"
+      },
+      "warnings": [
+        "Florida Statute § 117.021 governs RON",
+        "Florida was the first state to enable RON (2019)",
+        "AI output remains advisory-only in compliant mode"
+      ],
+      "maxRiskScore": 70,
+      "blockedFraudSignals": ["document_tamper_detected", "identity_mismatch"],
+      "publicationModes": ["disabled", "best_effort", "required_for_protocol_sync"],
+      "stateSpecific": {
+        "state": "Florida",
+        "stateCode": "FL",
+        "notaryCommissionAuthority": "Florida Department of State",
+        "ronEnabled": true,
+        "stampsRequired": true,
+        "sealRequired": true
+      }
+    }
+  ]
+}
