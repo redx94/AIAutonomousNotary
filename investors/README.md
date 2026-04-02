@@ -18,6 +18,9 @@ Welcome. This folder is your dedicated hub for everything you need to understand
 | 8 | [Roadmap](./08_ROADMAP.md) | Our build plan and milestones |
 | 9 | [Competitive Advantage](./09_COMPETITIVE_ADVANTAGE.md) | Why we win against competitors |
 | 10 | [Team, IP & Legal Foundation](./10_TEAM_AND_IP.md) | Who is building this and how it's protected |
+| 11 | [Friday Positioning Memo](./11_FRIDAY_POSITIONING_MEMO.md) | How to position the company credibly right now |
+| 12 | [5-Minute Pitch](./12_FIVE_MINUTE_PITCH.md) | Spoken investor pitch grounded in current reality |
+| 13 | [Friday Demo & Slide Script](./13_FRIDAY_DEMO_AND_SLIDE_SCRIPT.md) | What to show, what to say, and what not to fake |
 
 ---
 
@@ -43,6 +46,9 @@ If this is your **first time** looking at the project:
 
 If you want to understand the **financials first**:
 > Start with **Document 6 (Financial Projections)** → then **Document 4 (Market Opportunity)** → then **Document 7 (Investment Terms)**.
+
+If you are preparing for a **live investor meeting this week**:
+> Start with **Document 11 (Friday Positioning Memo)** → then **Document 12 (5-Minute Pitch)** → then **Document 13 (Friday Demo & Slide Script)**.
 
 ---
 
