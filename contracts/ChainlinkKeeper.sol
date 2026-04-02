@@ -13,9 +13,9 @@
  */
 pragma solidity ^0.8.20;
 
-import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./NotaryNFT.sol";
+import "./vendor/chainlink/automation/interfaces/AutomationCompatibleInterface.sol";
 
 /**
  * @title ChainlinkKeeper

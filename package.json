@@ -25,7 +25,6 @@
     "compliance:shadow": "node scripts/compliance/run-shadow-benchmark.js"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.8.0",
     "@openzeppelin/contracts": "^4.9.6"
   },
   "devDependencies": {
@@ -51,5 +50,9 @@
     "solidity"
   ],
   "author": "AI Autonomous Notary Protocol",
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "serialize-javascript": "^7.0.5",
+    "undici": "^6.24.0"
+  }
 }
