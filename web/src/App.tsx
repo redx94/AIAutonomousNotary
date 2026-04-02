@@ -20,6 +20,10 @@ import { NotaryCaseReview } from './screens/notary/NotaryCaseReview';
 
 // Compliance Screens
 import { CaseLedger } from './screens/compliance/CaseLedger';
+import { ComplianceCaseDetail } from './screens/compliance/ComplianceCaseDetail';
+import { EvidenceExplorer } from './screens/compliance/EvidenceExplorer';
+import { PolicyRules } from './screens/compliance/PolicyRules';
+import { PublicationOps } from './screens/compliance/PublicationOps';
 
 // Verifier Screens
 import { VerificationPortal } from './screens/verifier/VerificationPortal';
@@ -47,6 +51,7 @@ const App: FC = () => {
           <Route path="/signer/upload" element={<DocumentIntake />} />
           <Route path="/signer/ai-findings" element={<AIFindings />} />
           <Route path="/signer/identity" element={<IdentityProofing />} />
+          <Route path="/signer/case/:caseId" element={<CaseDetail />} />
           <Route path="/signer/case" element={<CaseDetail />} />
           <Route path="/signer/session-prep" element={<SessionPrep />} />
           <Route path="/signer/session" element={<LiveSession />} />
@@ -55,10 +60,15 @@ const App: FC = () => {
           {/* Notary Routes */}
           <Route path="/notary" element={<NotaryQueue />} />
           <Route path="/notary/cases" element={<NotaryQueue />} />
+          <Route path="/notary/case/:caseId" element={<NotaryCaseReview />} />
           <Route path="/notary/case" element={<NotaryCaseReview />} />
           
           {/* Compliance Routes */}
           <Route path="/compliance" element={<CaseLedger />} />
+          <Route path="/compliance/case/:caseId" element={<ComplianceCaseDetail />} />
+          <Route path="/compliance/evidence/:bundleId" element={<EvidenceExplorer />} />
+          <Route path="/compliance/policies" element={<PolicyRules />} />
+          <Route path="/compliance/publication/:caseId" element={<PublicationOps />} />
           
           {/* Verifier Routes */}
           <Route path="/verify" element={<VerificationPortal />} />
