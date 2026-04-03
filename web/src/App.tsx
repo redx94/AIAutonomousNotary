@@ -17,6 +17,9 @@ import { FinalPackage } from './screens/signer/FinalPackage';
 // Notary Screens
 import { NotaryQueue } from './screens/notary/NotaryQueue';
 import { NotaryCaseReview } from './screens/notary/NotaryCaseReview';
+import { NotaryLiveSession } from './screens/notary/NotaryLiveSession';
+import { NotaryEvidence } from './screens/notary/NotaryEvidence';
+import { NotaryExceptions } from './screens/notary/NotaryExceptions';
 
 // Compliance Screens
 import { CaseLedger } from './screens/compliance/CaseLedger';
@@ -24,9 +27,14 @@ import { ComplianceCaseDetail } from './screens/compliance/ComplianceCaseDetail'
 import { EvidenceExplorer } from './screens/compliance/EvidenceExplorer';
 import { PolicyRules } from './screens/compliance/PolicyRules';
 import { PublicationOps } from './screens/compliance/PublicationOps';
+import { AuditTrail } from './screens/compliance/AuditTrail';
+import { EvidenceBundles } from './screens/compliance/EvidenceBundles';
+import { RetentionPolicy } from './screens/compliance/RetentionPolicy';
 
 // Verifier Screens
 import { VerificationPortal } from './screens/verifier/VerificationPortal';
+import { VerifyBundle } from './screens/verifier/VerifyBundle';
+import { PublicationStatus } from './screens/verifier/PublicationStatus';
 
 const App: FC = () => {
   const { currentRole, setRole } = useCaseStore();
@@ -62,24 +70,24 @@ const App: FC = () => {
           <Route path="/notary/cases" element={<NotaryQueue />} />
           <Route path="/notary/case/:caseId" element={<NotaryCaseReview />} />
           <Route path="/notary/case" element={<NotaryCaseReview />} />
-          <Route path="/notary/session" element={<Navigate to="/notary" replace />} />
-          <Route path="/notary/evidence" element={<Navigate to="/notary" replace />} />
-          <Route path="/notary/exceptions" element={<Navigate to="/notary" replace />} />
+          <Route path="/notary/session" element={<NotaryLiveSession />} />
+          <Route path="/notary/evidence" element={<NotaryEvidence />} />
+          <Route path="/notary/exceptions" element={<NotaryExceptions />} />
 
           {/* Compliance Routes */}
           <Route path="/compliance" element={<CaseLedger />} />
           <Route path="/compliance/case/:caseId" element={<ComplianceCaseDetail />} />
           <Route path="/compliance/evidence/:bundleId" element={<EvidenceExplorer />} />
-          <Route path="/compliance/evidence" element={<Navigate to="/compliance" replace />} />
+          <Route path="/compliance/evidence" element={<EvidenceBundles />} />
           <Route path="/compliance/policies" element={<PolicyRules />} />
           <Route path="/compliance/publication/:caseId" element={<PublicationOps />} />
-          <Route path="/compliance/audit" element={<Navigate to="/compliance" replace />} />
-          <Route path="/compliance/retention" element={<Navigate to="/compliance" replace />} />
+          <Route path="/compliance/audit" element={<AuditTrail />} />
+          <Route path="/compliance/retention" element={<RetentionPolicy />} />
 
           {/* Verifier Routes */}
           <Route path="/verify" element={<VerificationPortal />} />
-          <Route path="/verify/bundle" element={<Navigate to="/verify" replace />} />
-          <Route path="/verify/publication" element={<Navigate to="/verify" replace />} />
+          <Route path="/verify/bundle" element={<VerifyBundle />} />
+          <Route path="/verify/publication" element={<PublicationStatus />} />
           <Route path="/verify/:caseId" element={<VerificationPortal />} />
 
           {/* Default Redirect */}
