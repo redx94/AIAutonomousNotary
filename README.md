@@ -49,8 +49,36 @@ The protocol is built on a robust, heavily-tested Solidity foundation (`143/143 
 - **`EmergencyProtocol.sol`**: Automated circuit breakers that halt the protocol at Level 1 (suspected fraud) or Level 3 (critical exploits).
 
 ### 3. Tokenization & Market Infrastructure
-- **`NotaryNFT.sol`**: The underlying ERC-721 contract minting the unique "Living Cipher" for every notarized document, enforcing ERC-2981 royalties.
-- **`FractionalizationVault.sol`**: Allows any Document NFT to be vaulted and fractionalized into ERC-20 shares, enabling retail investment in high-value document assets with pro-rata yield distribution and a 48-hour buyout mechanism.
+- **`NotaryNFT.sol`**: The master ERC-721 contract minting the unique "Living Cipher" for every finalized notarization session. Serves as the root legal/protocol/economic token. Eligible for fractionalization.
+- **`DocumentPageNFT.sol`** *(new)*: Child ERC-721 contract minting per-page provenance and collectible tokens. Each token is cryptographically linked to a master NotaryNFT and a `DocumentCollectionRegistry` entry. Page tokens are NOT eligible for fractionalization.
+- **`DocumentCollectionRegistry.sol`** *(new)*: On-chain manifest and relationship registry. Records the full composition of each session's NFT collection — master token, page tokens, document set root hash, manifest hash/CID, art seed, and mint lifecycle status. One collection per finalized session.
+- **`FractionalizationVault.sol`**: Locks a **master** NotaryNFT and issues fungible ERC-20 fraction tokens representing proportional economic ownership. Fractionalization targets the master token only, not arbitrary page NFTs.
+
+#### NFT Collection Model
+
+Each finalized notarization session produces:
+
+```
+Session / Case
+└── NFT Collection (DocumentCollectionRegistry entry)
+    ├── Master Notary Asset NFT (NotaryNFT token)
+    │   • Root legal / economic / collectible token
+    │   • Unique Living Cipher master artwork
+    │   • Fractionalization eligible
+    │   • Cryptographic identity of the document set
+    └── Page / Component NFTs (DocumentPageNFT tokens, one per page)
+        • Provenance + collectible sub-assets
+        • Visually related to master (same collection seed)
+        • Cryptographically bound to master via collectionId + masterTokenId
+        • NOT fractionalization eligible
+```
+
+**Visual generation:** All artwork is derived deterministically from artSeeds generated on-chain. The master artSeed comes from `keccak256(collectionId, sessionId, rootHash)`. Page artSeeds come from `keccak256(collectionId, pageIndex, pageHash)`. The off-chain renderer (Living Cipher SVG engine) uses these seeds to produce coherent, unique "Cryptographic Mandala" visuals without storing sensitive document content publicly.
+
+**NFT minting is strictly downstream of off-chain legal finalization:**
+1. Legal finalization → 2. Evidence bundle → 3. Collection registration → 4. Master NFT mint → 5. Page NFT mints → 6. Collection manifest finalized → 7. Optional protocol publication
+
+Mint failure does NOT invalidate the legal record.
 
 ## 🧭 Compliance Overlay V2
 

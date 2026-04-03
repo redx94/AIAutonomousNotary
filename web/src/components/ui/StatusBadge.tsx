@@ -39,6 +39,18 @@ const stateConfig: Record<string, { label: string; variant: string }> = {
   PUBLICATION_PENDING: { label: 'Publishing', variant: 'protocol' },
   PUBLISHED: { label: 'Published', variant: 'protocol' },
   PUBLICATION_FAILED: { label: 'Publication Failed', variant: 'warning' },
+
+  // NFT assetization states (downstream of finalization)
+  NFT_PREPARING: { label: 'Collection Preparing', variant: 'protocol' },
+  NFT_MINTED: { label: 'Collection Minted', variant: 'success' },
+  NFT_FAILED: { label: 'Mint Failed', variant: 'warning' },
+
+  // MintStatus values
+  NOT_STARTED: { label: 'Not Started', variant: 'neutral' },
+  PREPARING: { label: 'Preparing', variant: 'protocol' },
+  MINTING: { label: 'Minting…', variant: 'protocol' },
+  MINTED: { label: 'Minted', variant: 'success' },
+  FAILED: { label: 'Failed', variant: 'danger' },
   
   // Generic
   pending: { label: 'Pending', variant: 'warning' },

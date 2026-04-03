@@ -6,6 +6,37 @@ This document specifies the architecture for the **Document Securities Marketpla
 
 ---
 
+## NFT Collection Model (Corrected — Phase 1.5)
+
+A finalized notarization session produces a **session-unique NFT collection** composed of:
+
+| Token | Contract | Role |
+|-------|----------|------|
+| Master Notary Asset NFT | `NotaryNFT.sol` | Root legal / economic / collectible token. Fractionalization target. |
+| Page / Component NFTs | `DocumentPageNFT.sol` | Provenance + collectible sub-assets per page. NOT fractionalized. |
+| Collection Manifest | `DocumentCollectionRegistry.sol` | On-chain relationship registry tying master + pages together. |
+
+**Key invariants:**
+- One session → one collection → one master NFT → N page NFTs
+- Fractionalization (via `FractionalizationVault`) targets **only** the master NotaryNFT
+- Page NFTs are provenance/collectible artifacts — never direct economic instruments
+- NFT minting occurs **after** off-chain legal finalization; mint failure does not affect the legal record
+- All visual seeds are derived deterministically on-chain; sensitive document content is never stored publicly in token metadata
+
+**Finalization → Assetization flow:**
+```
+Legal finalization (off-chain)
+→ Evidence bundle
+→ Collection registration (DocumentCollectionRegistry)
+→ Master NFT mint (NotaryNFT)
+→ Page NFT mints (DocumentPageNFT, optional)
+→ Collection manifest finalized
+→ Optional protocol publication
+→ User sees Digital Asset Collection in UI
+```
+
+---
+
 ## Marketplace Layers
 
 ```

@@ -13,6 +13,7 @@ import { CaseDetail } from './screens/signer/CaseDetail';
 import { SessionPrep } from './screens/signer/SessionPrep';
 import { LiveSession } from './screens/signer/LiveSession';
 import { FinalPackage } from './screens/signer/FinalPackage';
+import { DigitalAssets } from './screens/signer/DigitalAssets';
 
 // Notary Screens
 import { NotaryQueue } from './screens/notary/NotaryQueue';
@@ -64,6 +65,8 @@ const App: FC = () => {
           <Route path="/signer/session-prep" element={<SessionPrep />} />
           <Route path="/signer/session" element={<LiveSession />} />
           <Route path="/signer/final" element={<FinalPackage />} />
+          <Route path="/signer/assets" element={<DigitalAssets />} />
+          <Route path="/signer/assets/:caseId" element={<DigitalAssets />} />
 
           {/* Notary Routes */}
           <Route path="/notary" element={<NotaryQueue />} />
