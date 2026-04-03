@@ -43,6 +43,9 @@ export class CaseService {
       'PUBLICATION_PENDING': 'Publishing to Protocol',
       'PUBLISHED': 'Published',
       'PUBLICATION_FAILED': 'Publication Failed',
+      'NFT_PREPARING': 'Collection Preparing',
+      'NFT_MINTED': 'Collection Minted',
+      'NFT_FAILED': 'Mint Failed',
     };
     return labels[state] || state;
   }

@@ -1,10 +1,11 @@
 import React from 'react';
 // import { cn } from '../../lib/utils';
+import { Link } from 'react-router-dom';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { LegalStatusCard } from '../../components/authority/LegalStatusCard';
 import { ProtocolPublicationLabel } from '../../components/authority/ProtocolPublicationLabel';
 import { EvidenceIntegrityCard } from '../../components/evidence/EvidenceIntegrityCard';
-import { CheckCircle2, Download, Share2, FileText, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Download, Share2, FileText, ExternalLink, Gem, Layers, ArrowRight } from 'lucide-react';
 
 export const FinalPackage: React.FC = () => {
   // Mock finalized case
@@ -169,6 +170,52 @@ export const FinalPackage: React.FC = () => {
                 View
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Digital Asset Collection */}
+      <div className="bg-gradient-to-br from-neutral-950 to-neutral-800 rounded-xl border border-neutral-700 p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+            <Gem className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-1 flex-wrap">
+              <h3 className="font-semibold text-white">Digital Asset Collection</h3>
+              <StatusBadge state="NFT_MINTED" size="sm" />
+            </div>
+            <p className="text-sm text-neutral-300 mt-1">
+              Your notarization has been assetized into a session-unique NFT collection —
+              a master notary asset and page-level provenance tokens.
+              The master NFT is eligible for fractionalization.
+            </p>
+            <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+              <div className="bg-white/10 rounded-lg p-3">
+                <Gem className="w-5 h-5 text-white mx-auto mb-1" />
+                <p className="text-white font-bold text-lg">1</p>
+                <p className="text-neutral-400 text-xs">Master NFT</p>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3">
+                <Layers className="w-5 h-5 text-white mx-auto mb-1" />
+                <p className="text-white font-bold text-lg">3</p>
+                <p className="text-neutral-400 text-xs">Page NFTs</p>
+              </div>
+              <div className="bg-white/10 rounded-lg p-3">
+                <FileText className="w-5 h-5 text-white mx-auto mb-1" />
+                <p className="text-white font-bold text-lg">1</p>
+                <p className="text-neutral-400 text-xs">Collection</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Link
+                to={`/signer/assets/${caseData.actId}`}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-neutral-900 rounded-lg font-medium text-sm hover:bg-neutral-100 transition-colors"
+              >
+                View Digital Asset Collection
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         </div>

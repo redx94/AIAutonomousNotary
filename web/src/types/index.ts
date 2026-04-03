@@ -14,7 +14,86 @@ export type CaseState =
   | 'REFUSED'
   | 'PUBLICATION_PENDING'
   | 'PUBLISHED'
-  | 'PUBLICATION_FAILED';
+  | 'PUBLICATION_FAILED'
+  // NFT assetization states (downstream of finalization)
+  | 'NFT_PREPARING'
+  | 'NFT_MINTED'
+  | 'NFT_FAILED';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NFT Collection Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Mint lifecycle states for a notarized document collection.
+ * These are DOWNSTREAM of off-chain legal finalization.
+ * A mint failure does NOT invalidate the legal record.
+ */
+export type MintStatus =
+  | 'NOT_STARTED'
+  | 'PREPARING'
+  | 'MINTING'
+  | 'MINTED'
+  | 'FAILED';
+
+/** Visual seed used to deterministically generate collection artwork (Living Cipher). */
+export interface ArtSeed {
+  masterSeed: string;   // hex string — derived from collectionId + sessionId + rootHash
+  collectionSeed: string; // hex string — shared across all child page NFTs
+}
+
+/** Master NotaryNFT asset — root legal/economic/collectible token for a session. */
+export interface MasterNFTAsset {
+  tokenId: string;
+  sessionId: string;
+  collectionId: string;
+  documentSetRootHash: string;
+  manifestHash: string;
+  manifestCID?: string;
+  artSeed: string;          // hex — drives the "Living Cipher" master artwork
+  mintedAt: string;         // ISO timestamp
+  mintStatus: MintStatus;
+  fractionalizationEligible: true;  // Always true for master tokens
+  metadataURI?: string;
+  verificationURL?: string;
+}
+
+/** Child DocumentPageNFT — provenance / collectible sub-asset for one page or unit. */
+export interface PageNFTAsset {
+  tokenId: string;
+  sessionId: string;
+  collectionId: string;
+  masterTokenId: string;
+  pageIndex: number;        // 0-based
+  pageCount: number;
+  pageHash: string;
+  artSeed: string;          // hex — derived from collectionId + pageIndex + pageHash
+  mintedAt: string;
+  metadataURI?: string;
+  fractionalizationEligible: false; // Always false for page tokens
+}
+
+/** Collection manifest — ties master + page NFTs together with session identity. */
+export interface NFTCollection {
+  collectionIndex: number;
+  collectionId: string;
+  sessionId: string;
+  caseId: string;           // Human-readable case identifier
+  masterAsset: MasterNFTAsset | null;
+  pageAssets: PageNFTAsset[];
+  pageCount: number;
+  documentSetRootHash: string;
+  manifestHash: string;
+  manifestCID?: string;
+  artSeed: ArtSeed;
+  recipient: string;
+  registeredAt: string;
+  mintStatus: MintStatus;
+  mintedAt?: string;
+  fractionalizationEligible: boolean;
+  publicationStatus?: 'none' | 'published' | 'failed';
+  publicationTxHash?: string;
+}
 
 // User Roles
 export type UserRole = 'signer' | 'notary' | 'compliance' | 'verifier';

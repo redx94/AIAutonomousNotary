@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { UserRole } from '../../types';
 import { 
-  Home, FileText, UserCheck, Video, Package, 
+  Home, FileText, UserCheck, Video, Package, Gem,
   ListTodo, Search, Shield, 
   Database, Settings, Globe
 } from 'lucide-react';
@@ -24,6 +24,7 @@ const navConfig: Record<UserRole, NavItem[]> = {
     { label: 'Identity Check', path: '/signer/identity', icon: UserCheck },
     { label: 'Session', path: '/signer/session', icon: Video },
     { label: 'Final Package', path: '/signer/final', icon: Package },
+    { label: 'Digital Assets', path: '/signer/assets', icon: Gem },
   ],
   notary: [
     { label: 'Queue', path: '/notary', icon: ListTodo },
