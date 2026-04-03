@@ -22,6 +22,7 @@ Welcome. This folder is your dedicated hub for everything you need to understand
 | 12 | [5-Minute Pitch](./12_FIVE_MINUTE_PITCH.md) | Spoken investor pitch grounded in current reality |
 | 13 | [Friday Demo & Slide Script](./13_FRIDAY_DEMO_AND_SLIDE_SCRIPT.md) | What to show, what to say, and what not to fake |
 | 14 | [Partner & Buyer Outreach Strategy](./14_PARTNER_OUTREACH.md) | Tiered target list, contact sequence, and first-email template |
+| 15 | [Outbound First-Contact Emails](./15_OUTREACH_EMAILS.md) | Exact draft emails for Proof, OneSpan, and Qualia — copy-paste ready |
 
 ---
 
@@ -54,7 +55,7 @@ If you are preparing for a **live investor meeting this week**:
 > Start with **Document 11 (Friday Positioning Memo)** → then **Document 12 (5-Minute Pitch)** → then **Document 13 (Friday Demo & Slide Script)**.
 
 If you are doing **partner or buyer outreach**:
-> Start with **Document 11 (Friday Positioning Memo)** → then **Document 14 (Partner Outreach Strategy)**.
+> Start with **Document 11 (Friday Positioning Memo)** → then **Document 14 (Partner Outreach Strategy)** → then **Document 15 (Outbound Emails)**.
 
 ---
 

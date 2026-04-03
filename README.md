@@ -82,7 +82,9 @@ The protocol is built on a robust, heavily-tested Solidity foundation (`143/143 
 - **`OracleManager.sol`**: Chainlink-compatible price feeds providing real-time USD valuations for document-backed assets (e.g., real estate deeds).
 - **`EmergencyProtocol.sol`**: Automated circuit breakers that halt the protocol at Level 1 (suspected fraud) or Level 3 (critical exploits).
 
-### 3. Tokenization & Market Infrastructure
+### 3. Tokenization & Market Infrastructure *(Phase 2 Expansion)*
+
+> **Context:** The tokenization layer is a downstream capability that activates after the compliance and notarization foundation is proven with real workflow partners. It is not the initial go-to-market. See [`docs/wedge/real-estate-title.md`](docs/wedge/real-estate-title.md) for the beachhead focus.
 - **`NotaryNFT.sol`**: The master ERC-721 contract minting the unique "Living Cipher" for every finalized notarization session. Serves as the root legal/protocol/economic token. Eligible for fractionalization.
 - **`DocumentPageNFT.sol`** *(new)*: Child ERC-721 contract minting per-page provenance and collectible tokens. Each token is cryptographically linked to a master NotaryNFT and a `DocumentCollectionRegistry` entry. Page tokens are NOT eligible for fractionalization.
 - **`DocumentCollectionRegistry.sol`** *(new)*: On-chain manifest and relationship registry. Records the full composition of each session's NFT collection — master token, page tokens, document set root hash, manifest hash/CID, art seed, and mint lifecycle status. One collection per finalized session.
@@ -240,17 +242,21 @@ npx hardhat run scripts/deploy.js --network sepolia
 
 ## 📚 Documentation Directory
 
-Explore the full protocol blueprint and Phase 2 architecture:
+### Compliance & Go-To-Market (Start Here)
+
+- 🧭 **[Compliance Overlay Architecture](docs/architecture/compliance-overlay.md)** - Additive legal-operability shell around the protocol core. The architectural moat.
+- 🧱 **[Core vs Overlay Boundary](docs/architecture/core-vs-overlay-boundary.md)** - Where compliance logic lives and where it explicitly does not.
+- 🏠 **[Real Estate / Title Wedge](docs/wedge/real-estate-title.md)** - Initial go-to-market focus: eClosing, MISMO alignment, buyer personas, and competitive framing.
+- 🪪 **[Identity Verification Integration](docs/integrations/identity-verification.md)** - IDV integration path (Persona, Socure, AU10TIX), overlay hookup spec, and implementation checklist.
+- 📋 **[What Is Real / What Is Mocked / What Is Next](docs/STATUS.md)** - Single honest reference page. Read before any partner or investor conversation.
+
+### Phase 2 Expansion Architecture (Tokenization & Marketplace)
 
 - 📊 **[Tokenomics (NOTARY)](docs/TOKENOMICS.md)** - 100M supply, distribution, and the 5 utility pillars.
 - 🏪 **[Marketplace Architecture](docs/MARKETPLACE_ARCHITECTURE.md)** - Fractional AMMs, document-backed lending, and order books.
 - 🌐 **[DID Interface](docs/DID_INTERFACE.md)** - W3C Decentralized Identity integration for KYC/AML.
 - 🎨 **[Frontend Blueprint](docs/FRONTEND_BLUEPRINT.md)** - End-user DApp architecture and features.
 - 📜 **[Development Roadmap](docs/ROADMAP.md)** - The 5-Phase, 48-month master plan to mainnet.
-- 🧭 **[Compliance Overlay Architecture](docs/architecture/compliance-overlay.md)** - Additive legal-operability shell around the protocol core.
-- 🧱 **[Core vs Overlay Boundary](docs/architecture/core-vs-overlay-boundary.md)** - Where compliance logic lives and where it explicitly does not.
-- 🏠 **[Real Estate / Title Wedge](docs/wedge/real-estate-title.md)** - Initial go-to-market focus: eClosing, MISMO alignment, and target buyer personas.
-- 🪪 **[Identity Verification Integration](docs/integrations/identity-verification.md)** - IDV integration path (Persona, Socure, AU10TIX) and overlay hookup plan.
 
 ---
 
