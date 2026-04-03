@@ -4,7 +4,8 @@ import { Layout } from './components/layout/Layout';
 import { useCaseStore } from './store/useCaseStore';
 import type { UserRole } from './types';
 
-const isGithubPages = window.location.hostname.endsWith('github.io');
+const isGithubPages = window.location.hostname === 'github.io'
+  || window.location.hostname.endsWith('.github.io');
 const Router = isGithubPages ? HashRouter : BrowserRouter;
 
 // Signer Screens
