@@ -249,6 +249,8 @@ Explore the full protocol blueprint and Phase 2 architecture:
 - 📜 **[Development Roadmap](docs/ROADMAP.md)** - The 5-Phase, 48-month master plan to mainnet.
 - 🧭 **[Compliance Overlay Architecture](docs/architecture/compliance-overlay.md)** - Additive legal-operability shell around the protocol core.
 - 🧱 **[Core vs Overlay Boundary](docs/architecture/core-vs-overlay-boundary.md)** - Where compliance logic lives and where it explicitly does not.
+- 🏠 **[Real Estate / Title Wedge](docs/wedge/real-estate-title.md)** - Initial go-to-market focus: eClosing, MISMO alignment, and target buyer personas.
+- 🪪 **[Identity Verification Integration](docs/integrations/identity-verification.md)** - IDV integration path (Persona, Socure, AU10TIX) and overlay hookup plan.
 
 ---
 

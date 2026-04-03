@@ -21,20 +21,23 @@ Welcome. This folder is your dedicated hub for everything you need to understand
 | 11 | [Friday Positioning Memo](./11_FRIDAY_POSITIONING_MEMO.md) | How to position the company credibly right now |
 | 12 | [5-Minute Pitch](./12_FIVE_MINUTE_PITCH.md) | Spoken investor pitch grounded in current reality |
 | 13 | [Friday Demo & Slide Script](./13_FRIDAY_DEMO_AND_SLIDE_SCRIPT.md) | What to show, what to say, and what not to fake |
+| 14 | [Partner & Buyer Outreach Strategy](./14_PARTNER_OUTREACH.md) | Tiered target list, contact sequence, and first-email template |
 
 ---
 
-## 📋 Quick Facts at a Glance
+## 📋 Current Status at a Glance
+
+> These figures reflect targets and technical milestones. For an honest account of what is built vs. what is next, read the [Friday Positioning Memo](./11_FRIDAY_POSITIONING_MEMO.md) before citing any of these numbers to a counterparty.
 
 | | |
 |---|---|
 | **Company** | AI Autonomous Notary |
-| **Sector** | Legal Technology + Real-World Asset Tokenization |
-| **Stage** | Pre-Seed / Seed — Phase 1 Complete |
-| **Raise Target** | $3.5M – $5.0M |
-| **Pre-Money Valuation** | $25M – $35M |
-| **5-Year Revenue Target** | $88.5M ARR |
-| **Technology Status** | 143 tests passing, ~80% code coverage |
+| **Sector** | Legal Technology + Compliance Infrastructure + Real-World Asset Tokenization |
+| **Stage** | Pre-Seed — Phase 1 Architecture Complete |
+| **Raise Target** | $3.5M – $5.0M (see Document 7 for what this funds) |
+| **Pre-Money Valuation** | $25M – $35M (target; repo alone does not yet support this anchor — see Memo 11) |
+| **5-Year Revenue Target** | $88.5M ARR (projection; no pilots or revenue today) |
+| **Technology Status** | 143 tests passing, ~80% code coverage, compliance overlay implemented, no external audit yet |
 | **Token** | $NOTARY — 100,000,000 fixed supply |
 
 ---
@@ -49,6 +52,9 @@ If you want to understand the **financials first**:
 
 If you are preparing for a **live investor meeting this week**:
 > Start with **Document 11 (Friday Positioning Memo)** → then **Document 12 (5-Minute Pitch)** → then **Document 13 (Friday Demo & Slide Script)**.
+
+If you are doing **partner or buyer outreach**:
+> Start with **Document 11 (Friday Positioning Memo)** → then **Document 14 (Partner Outreach Strategy)**.
 
 ---
 
