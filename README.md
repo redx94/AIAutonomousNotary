@@ -4,13 +4,14 @@
 
 # 🏛️ AI Autonomous Notary
 
-**The Premier Decentralized Protocol for Document Securities & Cryptographic Notarization**
+**Compliance-aware digital notarization infrastructure — cryptographic proofs, human-supervised authority, and optional on-chain publication.**
 
 [![License: BUSL-1.1](https://img.shields.io/badge/License-BUSL--1.1-blue.svg)](./LICENSE)
 [![Coverage](https://img.shields.io/badge/Coverage-79%25-brightgreen.svg)]()
 [![Solidity](https://img.shields.io/badge/Solidity-%5E0.8.20-363636.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-143%20Passing-success.svg)]()
 [![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-View%20UI%2FUX-blueviolet?style=for-the-badge)](https://redx94.github.io/AIAutonomousNotary/)
+[![Topics](https://img.shields.io/badge/topics-notarization%20%7C%20RON%20%7C%20compliance%20%7C%20solidity%20%7C%20regtech-informational)]()
 
 <div align="center">
 
@@ -22,15 +23,48 @@
 
 ---
 
-AI Autonomous Notary is a protocol that transforms traditional document notarization from a static, per-transaction service into a **dynamic, tradeable Web3 asset class**. By combining advanced Artificial Intelligence for fraud detection, zero-knowledge cryptographic proofs, and ERC-3643 compliant tokenization, the platform allows real-world documents (deeds, IP, agreements) to be securely notarized, fractionalized, and traded on a decentralized secondary market.
+AI Autonomous Notary is a protocol and compliance framework for legally-significant document notarization. It combines a tested Solidity contract core with a **Compliance Overlay** — a human-supervised, policy-enforced authority flow that makes compliant remote online notarization (RON) possible today, while preserving autonomous on-chain publication as a downstream step. Tokenization of document-backed assets is a natural expansion of the architecture, not the current beachhead.
+
+The project targets **law firms, title and closing workflows, estate-planning providers, mortgage teams, and RON platform operators** who need cryptographic document trust that maps to real-world legal requirements — not a promise that blockchains replace notaries.
 
 ---
 
-## 🌟 The "Living Cipher" / Cryptographic Mandala
+## ✅ What Exists Today
 
-We move beyond standard QR codes. When a document is notarized on our protocol, the AI generates a **Cryptographic Mandala** — a "Living Cipher."
+This is an early-stage technical foundation. The following table is honest about what is real, what is demonstrated, and what is planned.
 
-The exact geometric intersections, colors, and wave frequencies of the NFT artwork are mathematically derived directly from the document's SHA-256 hash and the AI fraud score using steganography. While users see a stunning, unforgeable piece of digital art, our protocol scanner can "read" the geometry to instantly verify the document's authenticity.
+| Area | Status | Notes |
+|------|--------|-------|
+| **Solidity contract core** | ✅ Implemented & tested | 143 passing tests, ~80% coverage |
+| **Compliance Overlay** | ✅ Implemented | Human-supervised authority flow, policy engine, evidence bundle |
+| **Interactive demo UI** | ✅ Live | Signer, Notary, Compliance, Verifier workflows — [try it](https://redx94.github.io/AIAutonomousNotary/) |
+| **Compliance policy engine** | ✅ Implemented | Rule validation, fail-closed mode |
+| **Emergency controls** | ✅ Implemented | Circuit breakers at Level 1 / Level 3 |
+| **AI risk scoring** | 🟡 Demo/advisory | Advisory only; displayed to human reviewer, not authoritative |
+| **Identity proofing** | 🟡 Mocked in demo | Flow is designed; integrations (e.g. Jumio, Persona) not wired |
+| **On-chain publication** | 🟡 Testnet only | Sepolia deployment scripts exist; not mainnet |
+| **Tokenization / marketplace** | 🔵 Architecture designed | Contracts exist; no live market or trading |
+| **External security audit** | ❌ Not yet | Planned before production use |
+| **Production pilots** | ❌ Not yet | Actively seeking first design partner (see below) |
+
+> **The legal record lives in the off-chain evidence bundle.** On-chain publication is downstream and non-authoritative for legal validity. Mint failure does not invalidate the notarial act.
+
+---
+
+## 🧭 Why Compliance Is the Moat
+
+Most teams building in this space fail in one of two ways: they build a shallow app with no protocol foundation, or they build a pure crypto architecture that breaks when legal reality arrives.
+
+This project addresses both. The **Compliance Overlay** sits around the existing protocol core — it does not replace it. In `compliant` mode:
+
+- Legal validity flows from a **human-supervised off-chain authority** (the notary), not from a smart contract
+- The protocol core provides **cryptographic anchoring, evidence timestamping, and optional publication rails**
+- The overlay **fails closed** — if policy, ceremony artifact, human signoff, or evidence requirements are incomplete, the act does not finalize
+- AI findings are **advisory only**, clearly labeled as such throughout the UI and architecture
+
+This maps directly to how state-by-state RON law actually works: 47 states + D.C. allow remote online notarization, each with process controls, identity requirements, and audio-visual mandates. "We understand the boring part" is the moat.
+
+See [`docs/architecture/compliance-overlay.md`](docs/architecture/compliance-overlay.md) and [`docs/usage/compliant-mode.md`](docs/usage/compliant-mode.md) for the full operating model.
 
 ---
 
@@ -80,49 +114,45 @@ Session / Case
 
 Mint failure does NOT invalidate the legal record.
 
-## 🧭 Compliance Overlay V2
+## 🤝 Pilot & Design Partner Program
 
-The repository now includes a **Compliance Overlay** that sits around the existing protocol core instead of rewriting it. In `compliant` mode, legally operative notarization runs through an off-chain, human-supervised authority flow with policy enforcement, human ceremony, final signoff, and evidence bundle generation. The existing contracts remain intact as protocol primitives and optional publication rails for downstream proof, attestation, and anchoring.
+The biggest gap between this repo and an investable product is not the code — it's one real design partner willing to say: *"yes, we want this solved."*
 
-This does **not** turn the project into a smaller human-only product. The autonomous/provider-oriented architecture is still present, explicit, and testable. What changes in compliant mode is the authority boundary:
-- legal validity comes from the human-supervised off-chain flow
-- protocol publication is downstream and non-authoritative for legal validity
-- compliant mode fails closed if explicit review, ceremony artifact, policy, or evidence requirements are incomplete
+If you operate in **legal document workflows, title and closing, estate planning, mortgage, or remote online notarization**, and you're looking for cryptographic document trust infrastructure that respects your compliance obligations — we want to talk.
 
-See [`docs/architecture/compliance-overlay.md`](docs/architecture/compliance-overlay.md) and [`docs/usage/compliant-mode.md`](docs/usage/compliant-mode.md) for the operating model.
+**Target design partner personas:**
+- RON platform operators (Proof, BlueNotary, NotaryCam, Stavvy, Pavaso)
+- Title and closing workflow vendors (Qualia, Pavaso)
+- E-signature platforms exploring compliance-grade notarization extensions
+- Law firms or estate planning shops that need defensible digital document audit trails
+- Lenders running mortgage/closing workflows with multi-state RON requirements
+
+**📬 Contact:** Open a [GitHub Discussion](https://github.com/redx94/AIAutonomousNotary/discussions) or file an issue tagged `design-partner` to start a conversation.
 
 ---
 
-## 📈 Market Opportunity & Research
+## 📈 Market Context
 
-Traditional notarization is a $2.8B market constrained by physical boundaries and business hours. Blockchains and NFTs solve this completely, while unlocking a multi-trillion dollar document securities market.
+47 states + D.C. now have laws permitting remote online notarization (NASS, 2024). Tokenized real-world assets have grown to roughly $28B in market capitalization (BCG). The combination of compliance-aware notarization infrastructure and on-chain document anchoring sits inside two real, growing trends.
 
-| Metric | Projection / Data Point |
-|--------|-------------------------|
-| **Current TAM (2024)** | $2.8 Billion USD |
-| **Projected TAM (2033)** | $12.6 Billion USD (17.5% CAGR) |
-| **Cost Reduction** | 70-90% cheaper than traditional public notaries |
-| **Time to Finality** | 210ms complete notarization vs. Days/Weeks |
-| **Tokenized Debt Market**| SEC Framework projects `$1-3 Trillion` by 2030-2035 |
+| Metric | Data Point |
+|--------|-----------|
+| **RON-enabled jurisdictions** | 47 states + D.C. (NASS 2024) |
+| **Traditional notarization TAM** | $2.8B (2024) → $12.6B projected (2033, 17.5% CAGR) |
+| **Tokenized RWA market cap** | ~$28B (BCG, 2024) |
+| **Cost reduction potential** | 70–90% vs. in-person notarization |
 
-*See `docs/RESEARCH.md` for our full market analysis and academic sources.*
+*See `docs/RESEARCH.md` for full market analysis and sources.*
 
 ---
 
 ## 💼 Investor Relations
 
-> **Not a developer? Start here.** Our dedicated investor documentation explains everything about this project in plain English — no technical background required.
+> **Not a developer?** Our investor documentation explains the project in plain English — no technical background required.
 
 ### 📁 [→ Access the Investor Resource Center](./investors/README.md)
 
-| Quick Stat | |
-|---|---|
-| **Raise Target** | $3.5M – $5.0M Seed Round |
-| **Pre-Money Valuation** | $25M – $35M FDV |
-| **Technology Status** | Phase 1 Complete — 143/143 tests passing |
-| **5-Year Revenue Target** | $88.5M ARR |
-| **Token Supply** | 100,000,000 $NOTARY (fixed, deflationary) |
-| **Investor Allocation** | 15% of total token supply |
+The investor docs include current-state framing, what is and is not being claimed about maturity, the compliance operating model, and the next de-risking milestones. They are intentionally more conservative than the architecture vision — read them in that spirit.
 
 ### Investor Documents
 
@@ -143,21 +173,29 @@ Traditional notarization is a $2.8B market constrained by physical boundaries an
 
 ---
 
-## 💻 Frontend Ecosystem & UI/UX
+## 🌟 The "Living Cipher" / Cryptographic Mandala
 
-Our architecture includes a planned Next.js 14 Web3 portal designed for maximum Web2 accessibility.
+When a document is notarized and published on-chain, the protocol generates a **Cryptographic Mandala** — a "Living Cipher." The geometric intersections, colors, and wave frequencies of the NFT artwork are derived deterministically from the document's SHA-256 hash and session data. The off-chain renderer can "read" the geometry to instantly verify document authenticity without exposing document content.
+
+---
+
+## 💻 Live Demo UI
+
+The interactive demo is live at **[redx94.github.io/AIAutonomousNotary](https://redx94.github.io/AIAutonomousNotary/)** — no wallet or sign-up required.
 
 <div align="center">
   <img src="docs/ainotary_dashboard_mockup.png" alt="DApp Dashboard Mockup" width="80%" />
 </div>
 
-The portal serves **four key user segments**:
-1. **Document Owners**: Upload documents for instant AI pre-scanning and NFT seal issuance.
-2. **Notaries**: Manage multi-party signing queues and earn secondary royalty fees.
-3. **Fractional Investors**: Browse document-backed assets (real estate, IP), complete KYC, and purchase yield-bearing fractional shares.
-4. **Verifiers**: 100% walletless public verification of any Living Cipher NFT.
+The demo covers four role-based workflows:
+1. **Signer**: Document upload, AI advisory review, identity proofing, live session, final package
+2. **Notary**: Queue management, case review, human decision (approve / refuse)
+3. **Compliance**: Case ledger, evidence audit trail, publication status
+4. **Verifier**: Walletless public verification portal
 
-*See `docs/FRONTEND_BLUEPRINT.md` for the complete tech stack, API routes, and design system.*
+**What's mocked in the demo:** case data, AI scores, identity verification results, and the service layer. **What maps to real code:** the state model, event types, policy structure, and authority flow all reflect the actual overlay implementation.
+
+*See `docs/FRONTEND_BLUEPRINT.md` for the complete tech stack and `web/README.md` for the architecture alignment notes.*
 
 ---
 
@@ -223,6 +261,8 @@ This project is licensed under the [BUSL-1.1 License](./LICENSE).
 **Security Notice:** Phase 1 smart contracts have achieved `~80%` test coverage and incorporate rigorous OpenZeppelin access controls (`AccessControl`, `Pausable`, `ReentrancyGuard`). However, the protocol is actively under development and **has not yet undergone a formal external audit**. Do not use in production with real funds until Phase 3.
 
 ---
+
 <div align="center">
-  <i>Bringing the trust layer of the physical world onto the cryptographic frontier.</i>
+  <i>Compliance-aware notarization infrastructure for legally significant documents.</i><br/><br/>
+  <sub>Topics: notarization · remote-online-notarization · RON · compliance · regtech · solidity · ERC-3643 · document-security · cryptography · smart-contracts · legal-tech · e-sign · identity</sub>
 </div>
