@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { Video, Clock, User, CheckCircle2, AlertCircle, ChevronRight, Calendar } from 'lucide-react';
 
@@ -112,8 +113,8 @@ export const SessionPrep: React.FC = () => {
         <button className="flex-1 px-4 py-3 border border-neutral-300 text-neutral-700 rounded-lg font-medium hover:bg-neutral-50 transition-colors">
           Reschedule
         </button>
-        <a
-          href="/signer/session"
+        <Link
+          to="/signer/session"
           className={cn(
             'flex-1 px-4 py-3 bg-primary-600 text-white rounded-lg font-medium',
             'hover:bg-primary-700 transition-colors inline-flex items-center justify-center gap-2'
@@ -121,7 +122,7 @@ export const SessionPrep: React.FC = () => {
         >
           Join Session
           <ChevronRight className="w-4 h-4" />
-        </a>
+        </Link>
       </div>
     </div>
   );

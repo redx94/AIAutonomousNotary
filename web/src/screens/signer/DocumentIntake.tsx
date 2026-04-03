@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { Upload, File, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
 
@@ -143,13 +144,13 @@ export const DocumentIntake: React.FC = () => {
                   >
                     Replace
                   </button>
-                  <a
-                    href="/signer/ai-findings"
+                  <Link
+                    to="/signer/ai-findings"
                     className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors inline-flex items-center justify-center gap-2"
                   >
                     Continue
                     <ChevronRight className="w-4 h-4" />
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>

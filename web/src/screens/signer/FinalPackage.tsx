@@ -161,15 +161,15 @@ export const FinalPackage: React.FC = () => {
               <button className="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium text-sm hover:bg-primary-700 transition-colors">
                 Copy
               </button>
-              <a
-                href={`/verify/${caseData.actId}`}
+              <Link
+                to={`/verify/${caseData.actId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg font-medium text-sm hover:bg-neutral-50 transition-colors inline-flex items-center gap-1"
               >
                 View
                 <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
