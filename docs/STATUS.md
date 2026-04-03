@@ -1,200 +1,98 @@
-# AI Autonomous Notary: Project Status Tracker
+# What Is Real / What Is Mocked / What Is Next
 
-## Project Overview
-**Current Status**: Phase 1 - Foundation Development (Months 1-6)  
-**Next Milestone**: Core Smart Contract Suite Completion  
-**Overall Progress**: 15% Complete  
+> **Purpose:** A single honest reference page for partners, investors, and technical reviewers. Do not send anyone to pitch materials before they have read this page. Last updated: April 2026.
 
 ---
 
-## Phase 1: Foundation (Months 1-6) - Security-First Development
-### Core Smart Contracts ✅ COMPLETED
-- [x] **Basic NotaryNFT.sol** - ERC-721 implementation
-- [x] **AIValidationEngine.sol** - Placeholder AI integration
-- [x] **ChainlinkKeeper.sol** - Automation framework
-- [x] **Keeper.sol** - Custom keeper contract
+## The Honest Summary
 
-### Phase 1 Enhancements 🔄 IN PROGRESS
-- [ ] **DocumentSecurityToken.sol** - ERC-3643 security token standard
-- [ ] **Enhanced NotaryNFT.sol** - Programmable metadata upgrade
-- [ ] **DocumentRegistry.sol** - Immutable document tracking
-- [ ] **AccessControl.sol** - Multi-signature permissions
-- [ ] **Emergency.sol** - Circuit breakers and pause functionality
+AI Autonomous Notary has a real, tested technical foundation — a Solidity protocol core with 143 passing tests and a Compliance Overlay that implements a human-supervised, policy-enforced authority flow for remote online notarization. It does **not** yet have: a production identity proofing integration, a recording infrastructure, an external security audit, a live pilot, or revenue.
 
-### AI Integration 🔄 IN PROGRESS
-- [ ] **AIEngine.sol** - Replace placeholder with real AI validation
-- [ ] **OracleManager.sol** - Chainlink oracle integration
-- [ ] **ValidationOracle.sol** - Decentralized verification consensus
-
-### Security & Testing 🔄 IN PROGRESS
-- [ ] **Formal verification** of all contracts
-- [ ] **Unit testing suite** (100% coverage target)
-- [ ] **Integration testing** across contracts
-- [ ] **Security audit preparation**
+The demo UI is real code running against a designed state model. The case data and service calls within it are mocked.
 
 ---
 
-## Phase 2: Marketplace & DeFi (Months 7-18) - Trading Infrastructure
-### Marketplace Development ❌ NOT STARTED
-- [ ] **DocumentMarketplace.sol** - Order book trading platform
-- [ ] **AMM.sol** - Automated market maker for liquidity
-- [ ] **RoyaltyManager.sol** - Secondary market income distribution
-- [ ] **AuctionHouse.sol** - Specialized auction mechanisms
+## ✅ What Is Real (Built and Tested)
 
-### Fractional Ownership ❌ NOT STARTED
-- [ ] **FractionalToken.sol** - ERC-20 derivatives for high-value documents
-- [ ] **TokenVault.sol** - Secure custody with multi-signature
-- [ ] **Redemption.sol** - Buyout mechanisms for whole ownership
-
-### DeFi Integration ❌ NOT STARTED
-- [ ] **LendingProtocol.sol** - Document-backed lending
-- [ ] **CollateralManager.sol** - Automated liquidation
-- [ ] **StakingRewards.sol** - Yield generation for custodians
-- [ ] **InsuranceFund.sol** - Systemic risk protection
+| Component | What It Does | Where to Look |
+|-----------|-------------|---------------|
+| **Solidity contract core** | 10 contracts covering notarization, registry, access control, fractionalization, oracle validation, and emergency controls | `contracts/` |
+| **143 passing tests** | Full unit test suite at ~80% coverage | `npx hardhat test` |
+| **Compliance Overlay** | Human-supervised authority flow: intake → AI advisory → identity → policy evaluation → human review → ceremony → finalization → evidence bundle → optional publication | `overlay/` |
+| **Policy engine** | Jurisdiction-configurable rule engine that enforces requirements and fails closed on incomplete execution | `overlay/policy/` |
+| **Finalization gate** | Blocks act completion if policy, ceremony, human signoff, or evidence requirements are not met | `overlay/gates/` |
+| **Evidence bundle spine** | Structured, hashable records for each step: AI output, policy decision, human review, authority execution, publication result | `overlay/evidence/` |
+| **Fail-closed configuration** | `LEGAL_MODE=compliant` by default; autonomous execution requires explicit opt-in override | `overlay/config/` |
+| **Interactive demo UI** | Four-role workflow demo (Signer, Notary, Compliance, Verifier) — live at [redx94.github.io/AIAutonomousNotary](https://redx94.github.io/AIAutonomousNotary/) | `web/` |
+| **Sepolia testnet deployment** | Deployment scripts exist and work | `scripts/deploy*.js` |
+| **Compliance validation CLI** | `npm run compliance:validate` and `npm run test:compliance` | `package.json` |
 
 ---
 
-## Phase 3: Advanced Capabilities (Months 19-30) - Enterprise Features
-### Advanced AI ❌ NOT STARTED
-- [ ] **NLPEngine.sol** - Natural language processing for contracts
-- [ ] **ComputerVision.sol** - Signature and document analysis
-- [ ] **FraudDetection.sol** - AI-powered anomaly detection
-- [ ] **RiskScoring.sol** - Dynamic risk assessment
+## 🟡 What Is Partially Real (Designed, Not Yet Wired)
 
-### Privacy & Security ❌ NOT STARTED
-- [ ] **ZKProof.sol** - Zero-knowledge proof verification
-- [ ] **ThresholdCrypto.sol** - Multi-party cryptographic operations
-- [ ] **PostQuantum.sol** - Quantum-resistant cryptography
-- [ ] **SecureEnclave.sol** - Hardware security integration
-
-### Cross-Chain Infrastructure ❌ NOT STARTED
-- [ ] **BridgeManager.sol** - Cross-chain asset transfers
-- [ ] **Interoperability.sol** - Multi-network compatibility
-- [ ] **Layer2.sol** - Scaling solutions integration
+| Component | What Is Real | What Is Mocked or Missing |
+|-----------|-------------|--------------------------|
+| **AI risk scoring** | The overlay calls an AI analysis step; the advisory output is displayed to the human reviewer and labeled as non-authoritative throughout | No external AI analysis provider is wired. Demo uses static mock scores. |
+| **Identity proofing** | The overlay has an identity proofing step in the compliant flow; the integration interface is specified in [`docs/integrations/identity-verification.md`](integrations/identity-verification.md) | No external IDV vendor (Persona, Socure, AU10TIX) is wired. Demo uses static mock identity results. |
+| **Ceremony recording** | The ceremony step produces an artifact in the evidence bundle | No recording infrastructure (video, audio) is wired. Demo simulates ceremony completion. |
+| **On-chain publication** | Sepolia deployment scripts exist; `overlay/services/` has a protocol publication adapter | Not mainnet. Publication in demo is simulated. |
+| **ERC-3643 security token** | `DocumentSecurityToken.sol` is implemented and tested | KYC waitlist is contract-level only; no live KYC/AML data provider is wired. |
 
 ---
 
-## Phase 4: Regulatory Compliance (Months 31-36) - Legal Framework
-### SEC Framework ❌ NOT STARTED
-- [ ] **SecurityToken.sol** - SEC-compliant token structures
-- [ ] **TransferRestrictions.sol** - KYC/AML enforcement
-- [ ] **Reporting.sol** - Regulatory reporting automation
-- [ ] **ComplianceOracle.sol** - Regulatory data integration
+## ❌ What Is Not Built Yet
 
-### Privacy & Data Protection ❌ NOT STARTED
-- [ ] **GDPRManager.sol** - Data protection compliance
-- [ ] **RightToErasure.sol** - Data deletion mechanisms
-- [ ] **HIPAACompliance.sol** - Health data protection
-- [ ] **PrivacyEngine.sol** - Selective disclosure systems
-
-### Identity & KYC ❌ NOT STARTED
-- [ ] **IdentityOracle.sol** - Decentralized identity integration
-- [ ] **KYCFlow.sol** - Accredited investor verification
-- [ ] **AMLMonitoring.sol** - Anti-money laundering systems
+| Component | Status | Notes |
+|-----------|--------|-------|
+| **External security audit** | Not started | Planned before any production use or institutional pilot |
+| **Production IDV vendor integration** | Not started | Integration path specified in `docs/integrations/identity-verification.md` |
+| **Recording/ceremony infrastructure** | Not started | Required for MISMO RON compliance |
+| **Mainnet deployment** | Not started | Requires audit + production IDV + pilot validation first |
+| **Live marketplace or trading** | Not started | Phase 2 expansion; tokenization contracts exist but no market is running |
+| **Production pilots or revenue** | Not started | Actively seeking first design partner |
+| **MISMO certification** | Not started | Process not yet initiated; gap analysis in `docs/wedge/real-estate-title.md` |
+| **Customer-facing production application** | Not started | The demo UI is a functional prototype over mocked data, not a production system |
 
 ---
 
-## Phase 5: Enterprise & Scale (Months 37-48) - Global Expansion
-### Enterprise Integration ❌ NOT STARTED
-- [ ] **APIManager.sol** - Enterprise API suite
-- [ ] **WhiteLabel.sol** - Branded deployment options
-- [ ] **EnterpriseDashboard.sol** - Administrative interfaces
-- [ ] **SLAContracts.sol** - Service level agreements
+## 🔵 What the Demo Shows vs. What It Uses
 
-### DAO Governance ❌ NOT STARTED
-- [ ] **Governance.sol** - Decentralized governance system
-- [ ] **TokenEconomics.sol** - Platform token design
-- [ ] **Treasury.sol** - Community fund management
-- [ ] **Voting.sol** - Proposal and voting mechanisms
+The demo at [redx94.github.io/AIAutonomousNotary](https://redx94.github.io/AIAutonomousNotary/) is a real React application. Here is a precise breakdown of what each layer reflects:
 
-### Global Expansion ❌ NOT STARTED
-- [ ] **JurisdictionManager.sol** - Multi-jurisdictional support
-- [ ] **Localization.sol** - Language and regulatory adaptation
-- [ ] **CrossBorder.sol** - International recognition frameworks
-
----
-
-## Continuous Development Streams
-### Security & Auditing 🔄 IN PROGRESS
-- [ ] **Ongoing security audits** for all new contracts
-- [ ] **Bug bounty programs** for vulnerability discovery
-- [ ] **Penetration testing** of frontend and APIs
-- [ ] **Incident response** protocols
-
-### Testing & Quality Assurance 🔄 IN PROGRESS
-- [ ] **Automated testing pipelines** for CI/CD
-- [ ] **Performance testing** for scalability
-- [ ] **Load testing** for high-volume scenarios
-- [ ] **Chaos engineering** for resilience
-
-### Documentation & User Experience 🔄 IN PROGRESS
-- [ ] **Technical documentation** for developers
-- [ ] **User documentation** and tutorials
-- [ ] **API documentation** with examples
-- [ ] **Regulatory compliance** documentation
-
-### Frontend Development ❌ NOT STARTED
-- [ ] **Web application** with modern UI/UX
-- [ ] **Mobile applications** for iOS/Android
-- [ ] **Admin dashboard** for enterprise users
-- [ ] **Marketplace interface** for trading
+| Demo Element | Real or Mocked | Detail |
+|-------------|---------------|--------|
+| **Navigation and routing** | Real | Hash-based React Router, four distinct role workflows |
+| **State machine (CaseState values)** | Real | States like `FINALIZED_OFFCHAIN`, `PUBLISHED`, `REFUSED` map to actual overlay event types |
+| **Policy structure** | Real | Policy decisions and fail-closed logic reflect actual `overlay/policy/` rules |
+| **Authority flow steps** | Real | The sequence (intake → AI → identity → policy → review → ceremony → finalize → bundle) maps to `CompliantActOrchestrator` |
+| **Authority boundary** | Real | AI is visually labeled as advisory; notary action is the legally operative step |
+| **Case data (documents, signers, etc.)** | Mocked | Static mock cases in `web/src/data/mockCases.ts` |
+| **AI risk scores** | Mocked | Static values; no external provider called |
+| **Identity verification results** | Mocked | Static mock results; no external IDV vendor called |
+| **Evidence bundle contents** | Mocked | Displayed structure matches spec; data is static |
+| **On-chain publication** | Simulated | No real transaction occurs in the demo |
 
 ---
 
-## Risk Assessment
+## ➡️ What Is Next (In Priority Order)
 
-### High Priority Risks ⚠️
-- **Smart Contract Security**: Current contracts lack formal verification
-- **AI Integration**: Placeholder functions need real implementation
-- **Regulatory Uncertainty**: SEC framework evolution may impact timeline
+| # | Work Item | Why It Matters |
+|---|-----------|---------------|
+| 1 | Wire a production IDV vendor (Persona recommended) | Required for any real pilot; required for MISMO review |
+| 2 | Add ceremony recording infrastructure stub | Required for RON legal compliance in most states |
+| 3 | Add real-estate/title jurisdiction rules to policy engine | Makes the overlay deployable in the eClosing beachhead |
+| 4 | One design-partner pilot (RON operator or title/closing platform) | Converts architecture proof into market proof |
+| 5 | External security audit | Required before institutional use; required for any serious acquisition conversation |
+| 6 | MISMO certification path inquiry | Legitimacy gate for mortgage/title buyers |
+| 7 | Mainnet deployment | Follows audit + pilot validation |
+| 8 | Production customer-facing application | Follows design partner feedback |
 
-### Medium Priority Risks ⚠️
-- **Development Timeline**: 48-month roadmap may need acceleration
-- **Resource Availability**: Specialized talent for cryptography/AI
-- **Market Adoption**: Enterprise pilots critical for validation
-
-### Low Priority Risks ℹ️
-- **Competition**: First-mover advantage in document securities
-- **Technical Scalability**: Layer 2 solutions available when needed
-
----
-
-## Key Performance Indicators (KPIs)
-
-### Technical KPIs
-- **Contract Security**: 0 critical vulnerabilities in audits
-- **Test Coverage**: >95% code coverage maintained
-- **AI Accuracy**: >99% verification accuracy target
-- **System Performance**: <2s average response time
-
-### Business KPIs
-- **Development Velocity**: 2-week sprint completion rate
-- **Code Quality**: <5% technical debt accumulation
-- **Security Posture**: Zero security incidents
-- **Documentation**: 100% feature documentation
-
-### Timeline KPIs
-- **Phase 1 Completion**: Month 6 target
-- **Phase 2 Completion**: Month 18 target
-- **MVP Launch**: Month 12 target
-- **Market Launch**: Month 24 target
+See [`docs/integrations/identity-verification.md`](integrations/identity-verification.md) for the IDV integration plan and [`docs/wedge/real-estate-title.md`](wedge/real-estate-title.md) for the initial go-to-market focus.
 
 ---
 
-## Recent Updates
+## One-Line Version
 
-### April 2026
-- ✅ Created comprehensive 5-phase development roadmap
-- ✅ Established todo tracking system for progress monitoring
-- ✅ Identified critical gaps between current state and research blueprint
-- 🔄 Beginning Phase 1 contract enhancements
+> **The architecture and compliance overlay are real and tested. The demo UI shows the right flows over mocked data. Identity verification, recording, and production pilots are the three gaps that must close before this is a deployable product.**
 
-### Next Actions
-1. **Immediate**: Upgrade existing smart contracts with security features
-2. **Short-term**: Implement real AI validation pipeline
-3. **Medium-term**: Begin marketplace infrastructure development
-4. **Long-term**: Prepare for regulatory sandbox participation
-
----
-
-*This status tracker is automatically updated as tasks are completed. Last updated: April 1, 2026*
