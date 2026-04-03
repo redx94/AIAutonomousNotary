@@ -43,7 +43,7 @@ const App: FC = () => {
   };
   
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/AIAutonomousNotary/">
       <Layout currentRole={currentRole} onRoleChange={setRole}>
         <Routes>
           {/* Signer Routes */}
@@ -56,24 +56,32 @@ const App: FC = () => {
           <Route path="/signer/session-prep" element={<SessionPrep />} />
           <Route path="/signer/session" element={<LiveSession />} />
           <Route path="/signer/final" element={<FinalPackage />} />
-          
+
           {/* Notary Routes */}
           <Route path="/notary" element={<NotaryQueue />} />
           <Route path="/notary/cases" element={<NotaryQueue />} />
           <Route path="/notary/case/:caseId" element={<NotaryCaseReview />} />
           <Route path="/notary/case" element={<NotaryCaseReview />} />
-          
+          <Route path="/notary/session" element={<Navigate to="/notary" replace />} />
+          <Route path="/notary/evidence" element={<Navigate to="/notary" replace />} />
+          <Route path="/notary/exceptions" element={<Navigate to="/notary" replace />} />
+
           {/* Compliance Routes */}
           <Route path="/compliance" element={<CaseLedger />} />
           <Route path="/compliance/case/:caseId" element={<ComplianceCaseDetail />} />
           <Route path="/compliance/evidence/:bundleId" element={<EvidenceExplorer />} />
+          <Route path="/compliance/evidence" element={<Navigate to="/compliance" replace />} />
           <Route path="/compliance/policies" element={<PolicyRules />} />
           <Route path="/compliance/publication/:caseId" element={<PublicationOps />} />
-          
+          <Route path="/compliance/audit" element={<Navigate to="/compliance" replace />} />
+          <Route path="/compliance/retention" element={<Navigate to="/compliance" replace />} />
+
           {/* Verifier Routes */}
           <Route path="/verify" element={<VerificationPortal />} />
+          <Route path="/verify/bundle" element={<Navigate to="/verify" replace />} />
+          <Route path="/verify/publication" element={<Navigate to="/verify" replace />} />
           <Route path="/verify/:caseId" element={<VerificationPortal />} />
-          
+
           {/* Default Redirect */}
           <Route path="/" element={<Navigate to={getDefaultRoute(currentRole)} replace />} />
           <Route path="*" element={<Navigate to={getDefaultRoute(currentRole)} replace />} />

@@ -1,3 +1,4 @@
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import type { UserRole } from '../../types';
 import { 
@@ -55,7 +56,7 @@ function AlertCircleIcon(props: { className?: string }) {
 
 export const Navigation: React.FC<NavigationProps> = ({ currentRole }) => {
   const items = navConfig[currentRole];
-  const currentPath = window.location.pathname;
+  const { pathname } = useLocation();
   
   return (
     <nav className="bg-neutral-50 border-b border-neutral-200">
@@ -63,12 +64,12 @@ export const Navigation: React.FC<NavigationProps> = ({ currentRole }) => {
         <div className="flex items-center gap-1 overflow-x-auto">
           {items.map((item) => {
             const Icon = item.icon;
-            const isActive = currentPath === item.path || currentPath.startsWith(item.path + '/');
+            const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
             
             return (
-              <a
+              <Link
                 key={item.path}
-                href={item.path}
+                to={item.path}
                 className={cn(
                   'flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors',
                   isActive 
@@ -78,7 +79,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentRole }) => {
               >
                 <Icon className="w-4 h-4" />
                 {item.label}
-              </a>
+              </Link>
             );
           })}
         </div>
