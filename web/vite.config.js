@@ -7,6 +7,7 @@ export default defineConfig({
         react(),
         tailwindcss(),
     ],
+    base: '/AIAutonomousNotary/',
     server: {
         port: 5173,
         host: true,
