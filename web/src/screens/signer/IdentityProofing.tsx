@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { CheckCircle2, Camera, CreditCard, User, ChevronRight, Shield } from 'lucide-react';
 
@@ -221,13 +222,13 @@ export const IdentityProofing: React.FC = () => {
           </button>
           
           {currentStep === steps.length - 1 ? (
-            <a
-              href="/signer/case"
+            <Link
+              to="/signer/case"
               className="inline-flex items-center gap-2 px-6 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
             >
               Continue to Case
               <ChevronRight className="w-4 h-4" />
-            </a>
+            </Link>
           ) : (
             <button
               onClick={handleCompleteStep}

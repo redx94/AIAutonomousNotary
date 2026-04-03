@@ -1,8 +1,12 @@
 import type { FC } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { useCaseStore } from './store/useCaseStore';
 import type { UserRole } from './types';
+
+const isGithubPages = window.location.hostname === 'github.io'
+  || window.location.hostname.endsWith('.github.io');
+const Router = isGithubPages ? HashRouter : BrowserRouter;
 
 // Signer Screens
 import { SignerHome } from './screens/signer/SignerHome';
@@ -52,7 +56,7 @@ const App: FC = () => {
   };
   
   return (
-    <BrowserRouter basename="/AIAutonomousNotary/">
+    <Router {...(isGithubPages ? {} : { basename: '/AIAutonomousNotary/' })}>
       <Layout currentRole={currentRole} onRoleChange={setRole}>
         <Routes>
           {/* Signer Routes */}
@@ -98,7 +102,7 @@ const App: FC = () => {
           <Route path="*" element={<Navigate to={getDefaultRoute(currentRole)} replace />} />
         </Routes>
       </Layout>
-    </BrowserRouter>
+    </Router>
   );
 }
 

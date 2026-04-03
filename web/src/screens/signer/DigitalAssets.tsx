@@ -19,6 +19,17 @@ function truncateHash(hash: string, chars = 8) {
   return `${hash.slice(0, chars + 2)}…${hash.slice(-chars)}`;
 }
 
+/** Wrap the SVG art generator so a bad seed or rendering edge case cannot crash the route. */
+function safeCipher(seed: string | undefined, opts: { variant: 'master' | 'page'; pageIndex?: number; size?: number }): string | null {
+  try {
+    if (!seed) return null;
+    return generateLivingCipherSVG(seed, opts);
+  } catch (err) {
+    console.error('Living Cipher render failed', err);
+    return null;
+  }
+}
+
 function MintStatusBanner({ status }: { status: MintStatus }) {
   if (status === 'MINTED') {
     return (
@@ -118,7 +129,7 @@ function HashRow({ label, value }: { label: string; value: string }) {
 function MasterNFTCard({ collection }: { collection: NFTCollection }) {
   const { masterAsset } = collection;
 
-  const artDataURI = generateLivingCipherSVG(
+  const artDataURI = safeCipher(
     masterAsset?.artSeed ?? collection.artSeed.masterSeed,
     { variant: 'master', size: 360 },
   );
@@ -127,11 +138,17 @@ function MasterNFTCard({ collection }: { collection: NFTCollection }) {
     <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm">
       {/* Artwork */}
       <div className="relative bg-neutral-950 flex items-center justify-center" style={{ minHeight: 280 }}>
-        <img
-          src={artDataURI}
-          alt="Master Notary NFT — Living Cipher artwork"
-          className="w-72 h-72 object-contain"
-        />
+        {artDataURI ? (
+          <img
+            src={artDataURI}
+            alt="Master Notary NFT — Living Cipher artwork"
+            className="w-72 h-72 object-contain"
+          />
+        ) : (
+          <div className="w-72 h-72 flex items-center justify-center rounded-lg border border-neutral-700 bg-neutral-900">
+            <Gem className="w-12 h-12 text-neutral-600" />
+          </div>
+        )}
         <div className="absolute top-3 left-3">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-medium">
             <Gem className="w-3.5 h-3.5" />
@@ -206,16 +223,22 @@ function PageNFTCard({
   pageHash: string;
   mintedAt?: string;
 }) {
-  const artDataURI = generateLivingCipherSVG(artSeed, { variant: 'page', pageIndex, size: 200 });
+  const artDataURI = safeCipher(artSeed, { variant: 'page', pageIndex, size: 200 });
 
   return (
     <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm group hover:border-primary-300 hover:shadow-md transition-all">
       <div className="bg-neutral-950 flex items-center justify-center p-4">
-        <img
-          src={artDataURI}
-          alt={`Page ${pageIndex + 1} NFT — Living Cipher artwork`}
-          className="w-32 h-32 object-contain group-hover:scale-105 transition-transform duration-300"
-        />
+        {artDataURI ? (
+          <img
+            src={artDataURI}
+            alt={`Page ${pageIndex + 1} NFT — Living Cipher artwork`}
+            className="w-32 h-32 object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-32 h-32 flex items-center justify-center rounded-lg border border-neutral-700 bg-neutral-900">
+            <Layers className="w-8 h-8 text-neutral-600" />
+          </div>
+        )}
       </div>
       <div className="p-4">
         <div className="flex items-center justify-between mb-2">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { AIAdvisoryLabel } from '../../components/authority/AIAdvisoryLabel';
 import { RiskBandCard } from '../../components/evidence/RiskBandCard';
 import { CheckCircle2, AlertTriangle, Info, ChevronRight } from 'lucide-react';
@@ -125,8 +126,8 @@ export const AIFindings: React.FC = () => {
         </div>
         
         <div className="mt-6 flex justify-end">
-          <a
-            href="/signer/identity"
+          <Link
+            to="/signer/identity"
             className={cn(
               'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors',
               'bg-primary-600 text-white hover:bg-primary-700'
@@ -134,7 +135,7 @@ export const AIFindings: React.FC = () => {
           >
             Continue to Identity Check
             <ChevronRight className="w-4 h-4" />
-          </a>
+          </Link>
         </div>
       </div>
     </div>
