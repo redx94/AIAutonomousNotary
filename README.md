@@ -10,6 +10,17 @@
 [![Coverage](https://img.shields.io/badge/Coverage-79%25-brightgreen.svg)]()
 [![Solidity](https://img.shields.io/badge/Solidity-%5E0.8.20-363636.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-143%20Passing-success.svg)]()
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-View%20UI%2FUX-blueviolet?style=for-the-badge)](https://redx94.github.io/AIAutonomousNotary/)
+
+<div align="center">
+
+### 👉 [**Try the Live Interactive Demo →**](https://redx94.github.io/AIAutonomousNotary/)
+
+*Explore the full Signer, Notary, and Compliance workflows — no wallet or sign-up required.*
+
+</div>
+
+---
 
 AI Autonomous Notary is a protocol that transforms traditional document notarization from a static, per-transaction service into a **dynamic, tradeable Web3 asset class**. By combining advanced Artificial Intelligence for fraud detection, zero-knowledge cryptographic proofs, and ERC-3643 compliant tokenization, the platform allows real-world documents (deeds, IP, agreements) to be securely notarized, fractionalized, and traded on a decentralized secondary market.
 
